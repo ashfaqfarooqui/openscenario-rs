@@ -45,9 +45,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 
-                if let Some(catalog_locations) = &document.catalog_locations {
-                    println!("Catalog locations: {:#?}", catalog_locations.vehicle_catalog);
-                }
+                let catalog_locations = &document.catalog_locations;
+                println!("Catalog locations: {:#?}", catalog_locations.vehicle_catalog);
             }
             openscenario_rs::types::OpenScenarioDocumentType::ParameterVariation => {
                 println!("Parameter variation file - no entities/storyboard");

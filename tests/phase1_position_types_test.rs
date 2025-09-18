@@ -9,7 +9,7 @@
 use openscenario_rs::types::positions::{
     Orientation, Position, RelativeLanePosition, RelativeRoadPosition,
 };
-use openscenario_rs::types::basic::{Double, OSString};
+use openscenario_rs::types::basic::{Double, Int, OSString};
 
 #[test]
 fn test_relative_road_position_xml_roundtrip() {
@@ -45,7 +45,7 @@ fn test_relative_lane_position_xml_roundtrip() {
     // Verify round-trip
     assert_eq!(original, deserialized);
     assert_eq!(deserialized.entity_ref.as_literal().unwrap(), "EgoVehicle");
-    assert_eq!(deserialized.d_lane, -1);
+    assert_eq!(deserialized.d_lane, Int::literal(-1));
     assert_eq!(deserialized.ds.as_literal().unwrap(), &15.0);
     assert_eq!(deserialized.offset.as_literal().unwrap(), &0.5);
 }
@@ -209,7 +209,7 @@ fn test_default_implementations() {
     
     let rel_lane_default = RelativeLanePosition::default();
     assert_eq!(rel_lane_default.entity_ref.as_literal().unwrap(), "DefaultEntity");
-    assert_eq!(rel_lane_default.d_lane, 0);
+    assert_eq!(rel_lane_default.d_lane, Int::literal(0));
     assert_eq!(rel_lane_default.ds.as_literal().unwrap(), &0.0);
     assert_eq!(rel_lane_default.offset.as_literal().unwrap(), &0.0);
     assert!(rel_lane_default.orientation.is_none());
@@ -234,7 +234,7 @@ fn test_builder_methods() {
     // Test RelativeLanePosition builders
     let pos3 = RelativeLanePosition::new("Vehicle3".to_string(), 1, 15.0, 0.5);
     assert_eq!(pos3.entity_ref.as_literal().unwrap(), "Vehicle3");
-    assert_eq!(pos3.d_lane, 1);
+    assert_eq!(pos3.d_lane, Int::literal(1));
     assert_eq!(pos3.ds.as_literal().unwrap(), &15.0);
     assert_eq!(pos3.offset.as_literal().unwrap(), &0.5);
     assert!(pos3.orientation.is_none());
@@ -242,7 +242,7 @@ fn test_builder_methods() {
     let orientation2 = Orientation::new(1.57, 0.0, 0.0);
     let pos4 = RelativeLanePosition::with_orientation("Vehicle4".to_string(), -2, 20.0, -0.5, orientation2);
     assert_eq!(pos4.entity_ref.as_literal().unwrap(), "Vehicle4");
-    assert_eq!(pos4.d_lane, -2);
+    assert_eq!(pos4.d_lane, Int::literal(-2));
     assert_eq!(pos4.ds.as_literal().unwrap(), &20.0);
     assert_eq!(pos4.offset.as_literal().unwrap(), &-0.5);
     assert!(pos4.orientation.is_some());

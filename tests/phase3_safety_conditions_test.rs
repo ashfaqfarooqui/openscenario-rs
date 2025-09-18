@@ -3,10 +3,11 @@
 use openscenario_rs::types::{
     conditions::{
         ByEntityCondition, CollisionCondition, OffRoadCondition, EndOfRoadCondition,
-        CollisionTarget
+        CollisionTarget, EntityCondition
     },
     basic::{Double, OSString},
     positions::Position,
+    scenario::triggers::TriggeringEntities,
 };
 
 #[test]
@@ -97,26 +98,27 @@ fn test_end_of_road_condition_default() {
 
 #[test]
 fn test_by_entity_condition_collision_variants() {
-    let collision_target = ByEntityCondition::collision_with_target("vehicle1");
-    let collision_type = ByEntityCondition::collision_with_type("pedestrian");
-    let collision_any = ByEntityCondition::collision();
+    let triggering_entities = TriggeringEntities::default();
+    let collision_target = ByEntityCondition::collision_with_target(triggering_entities.clone(), "vehicle1");
+    let collision_type = ByEntityCondition::collision_with_type(triggering_entities.clone(), "pedestrian");
+    let collision_any = ByEntityCondition::collision(triggering_entities.clone());
     
-    match collision_target {
-        ByEntityCondition::Collision(condition) => {
+    match collision_target.entity_condition {
+        EntityCondition::Collision(condition) => {
             assert_eq!(condition.target, Some(OSString::literal("vehicle1".to_string())));
         }
         _ => panic!("Expected Collision variant"),
     }
     
-    match collision_type {
-        ByEntityCondition::Collision(condition) => {
+    match collision_type.entity_condition {
+        EntityCondition::Collision(condition) => {
             assert!(condition.by_type.is_some());
         }
         _ => panic!("Expected Collision variant"),
     }
     
-    match collision_any {
-        ByEntityCondition::Collision(_) => (),
+    match collision_any.entity_condition {
+        EntityCondition::Collision(_) => (),
         _ => panic!("Expected Collision variant"),
     }
 }
@@ -124,10 +126,11 @@ fn test_by_entity_condition_collision_variants() {
 #[test]
 fn test_by_entity_condition_collision_at_position() {
     let position = Position::default();
-    let collision_pos = ByEntityCondition::collision_at_position(position.clone());
+    let triggering_entities = TriggeringEntities::default();
+    let collision_pos = ByEntityCondition::collision_at_position(triggering_entities, position.clone());
     
-    match collision_pos {
-        ByEntityCondition::Collision(condition) => {
+    match collision_pos.entity_condition {
+        EntityCondition::Collision(condition) => {
             assert_eq!(condition.position, Some(position));
         }
         _ => panic!("Expected Collision variant"),
@@ -136,18 +139,19 @@ fn test_by_entity_condition_collision_at_position() {
 
 #[test]
 fn test_by_entity_condition_safety_variants() {
-    let off_road = ByEntityCondition::off_road(2.0);
-    let end_of_road = ByEntityCondition::end_of_road(3.0);
+    let triggering_entities = TriggeringEntities::default();
+    let off_road = ByEntityCondition::off_road(triggering_entities.clone(), 2.0);
+    let end_of_road = ByEntityCondition::end_of_road(triggering_entities.clone(), 3.0);
     
-    match off_road {
-        ByEntityCondition::OffRoad(condition) => {
+    match off_road.entity_condition {
+        EntityCondition::OffRoad(condition) => {
             assert_eq!(condition.duration, Double::literal(2.0));
         }
         _ => panic!("Expected OffRoad variant"),
     }
     
-    match end_of_road {
-        ByEntityCondition::EndOfRoad(condition) => {
+    match end_of_road.entity_condition {
+        EntityCondition::EndOfRoad(condition) => {
             assert_eq!(condition.duration, Double::literal(3.0));
         }
         _ => panic!("Expected EndOfRoad variant"),
@@ -177,26 +181,26 @@ fn test_phase3_safety_conditions_serialization() {
 #[test]
 fn test_by_entity_condition_enum_completeness() {
     // Test that all variants can be matched
+    let triggering_entities = TriggeringEntities::default();
     let conditions = vec![
-        ByEntityCondition::collision(),
-        ByEntityCondition::off_road(1.0),
-        ByEntityCondition::end_of_road(2.0),
+        ByEntityCondition::collision(triggering_entities.clone()),
+        ByEntityCondition::off_road(triggering_entities.clone(), 1.0),
+        ByEntityCondition::end_of_road(triggering_entities.clone(), 2.0),
     ];
     
     for condition in conditions {
-        match condition {
-            ByEntityCondition::SchemaCompliant(_) => panic!("Unexpected SchemaCompliant variant"),
-            ByEntityCondition::Speed(_) => panic!("Unexpected Speed variant"),
-            ByEntityCondition::ReachPosition(_) => panic!("Unexpected ReachPosition variant"), 
-            ByEntityCondition::Distance(_) => panic!("Unexpected Distance variant"),
-            ByEntityCondition::RelativeDistance(_) => panic!("Unexpected RelativeDistance variant"),
-            ByEntityCondition::Acceleration(_) => panic!("Unexpected Acceleration variant"),
-            ByEntityCondition::StandStill(_) => panic!("Unexpected StandStill variant"),
-            ByEntityCondition::Collision(_) => assert!(true),
-            ByEntityCondition::OffRoad(_) => assert!(true),
-            ByEntityCondition::EndOfRoad(_) => assert!(true),
-            ByEntityCondition::TimeHeadway(_) => panic!("Unexpected TimeHeadway variant"),
-            ByEntityCondition::TimeToCollision(_) => panic!("Unexpected TimeToCollision variant"),
+        match condition.entity_condition {
+            EntityCondition::Speed(_) => panic!("Unexpected Speed variant"),
+            EntityCondition::ReachPosition(_) => panic!("Unexpected ReachPosition variant"), 
+            EntityCondition::Distance(_) => panic!("Unexpected Distance variant"),
+            EntityCondition::RelativeDistance(_) => panic!("Unexpected RelativeDistance variant"),
+            EntityCondition::Acceleration(_) => panic!("Unexpected Acceleration variant"),
+            EntityCondition::StandStill(_) => panic!("Unexpected StandStill variant"),
+            EntityCondition::Collision(_) => assert!(true),
+            EntityCondition::OffRoad(_) => assert!(true),
+            EntityCondition::EndOfRoad(_) => assert!(true),
+            EntityCondition::TimeHeadway(_) => panic!("Unexpected TimeHeadway variant"),
+            EntityCondition::TimeToCollision(_) => panic!("Unexpected TimeToCollision variant"),
         }
     }
 }

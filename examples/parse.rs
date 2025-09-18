@@ -106,72 +106,70 @@ fn resolve_file_paths_in_document(
     };
 
     // Process road network file references
-    if let Some(road_network) = &mut document.road_network {
-        println!("   🛣️  Processing road network files...");
-        
-        if let Some(logic_file) = &mut road_network.logic_file {
-            if resolve_path_value(&mut logic_file.filepath, "road logic") {
-                resolved_count += 1;
-            }
+    let road_network = &mut document.road_network;
+    println!("   🛣️  Processing road network files...");
+    
+    if let Some(logic_file) = &mut road_network.logic_file {
+        if resolve_path_value(&mut logic_file.filepath, "road logic") {
+            resolved_count += 1;
         }
-        
-        if let Some(scene_file) = &mut road_network.scene_graph_file {
-            if resolve_path_value(&mut scene_file.filepath, "scene graph") {
-                resolved_count += 1;
-            }
+    }
+    
+    if let Some(scene_file) = &mut road_network.scene_graph_file {
+        if resolve_path_value(&mut scene_file.filepath, "scene graph") {
+            resolved_count += 1;
         }
     }
 
     // Process catalog directory paths
-    if let Some(catalog_locations) = &mut document.catalog_locations {
-        println!("   📚 Processing catalog directory paths...");
-        
-        if let Some(vehicle_catalog) = &mut catalog_locations.vehicle_catalog {
-            if resolve_path_value(&mut vehicle_catalog.directory.path, "vehicle catalog directory") {
-                resolved_count += 1;
-            }
+    let catalog_locations = &mut document.catalog_locations;
+    println!("   📚 Processing catalog directory paths...");
+    
+    if let Some(vehicle_catalog) = &mut catalog_locations.vehicle_catalog {
+        if resolve_path_value(&mut vehicle_catalog.directory.path, "vehicle catalog directory") {
+            resolved_count += 1;
         }
-        
-        if let Some(controller_catalog) = &mut catalog_locations.controller_catalog {
-            if resolve_path_value(&mut controller_catalog.directory.path, "controller catalog directory") {
-                resolved_count += 1;
-            }
+    }
+    
+    if let Some(controller_catalog) = &mut catalog_locations.controller_catalog {
+        if resolve_path_value(&mut controller_catalog.directory.path, "controller catalog directory") {
+            resolved_count += 1;
         }
-        
-        if let Some(pedestrian_catalog) = &mut catalog_locations.pedestrian_catalog {
-            if resolve_path_value(&mut pedestrian_catalog.directory.path, "pedestrian catalog directory") {
-                resolved_count += 1;
-            }
+    }
+    
+    if let Some(pedestrian_catalog) = &mut catalog_locations.pedestrian_catalog {
+        if resolve_path_value(&mut pedestrian_catalog.directory.path, "pedestrian catalog directory") {
+            resolved_count += 1;
         }
-        
-        if let Some(misc_object_catalog) = &mut catalog_locations.misc_object_catalog {
-            if resolve_path_value(&mut misc_object_catalog.directory.path, "misc object catalog directory") {
-                resolved_count += 1;
-            }
+    }
+    
+    if let Some(misc_object_catalog) = &mut catalog_locations.misc_object_catalog {
+        if resolve_path_value(&mut misc_object_catalog.directory.path, "misc object catalog directory") {
+            resolved_count += 1;
         }
+    }
 
-        if let Some(environment_catalog) = &mut catalog_locations.environment_catalog {
-            if resolve_path_value(&mut environment_catalog.directory.path, "environment catalog directory") {
-                resolved_count += 1;
-            }
+    if let Some(environment_catalog) = &mut catalog_locations.environment_catalog {
+        if resolve_path_value(&mut environment_catalog.directory.path, "environment catalog directory") {
+            resolved_count += 1;
         }
+    }
 
-        if let Some(maneuver_catalog) = &mut catalog_locations.maneuver_catalog {
-            if resolve_path_value(&mut maneuver_catalog.directory.path, "maneuver catalog directory") {
-                resolved_count += 1;
-            }
+    if let Some(maneuver_catalog) = &mut catalog_locations.maneuver_catalog {
+        if resolve_path_value(&mut maneuver_catalog.directory.path, "maneuver catalog directory") {
+            resolved_count += 1;
         }
+    }
 
-        if let Some(trajectory_catalog) = &mut catalog_locations.trajectory_catalog {
-            if resolve_path_value(&mut trajectory_catalog.directory.path, "trajectory catalog directory") {
-                resolved_count += 1;
-            }
+    if let Some(trajectory_catalog) = &mut catalog_locations.trajectory_catalog {
+        if resolve_path_value(&mut trajectory_catalog.directory.path, "trajectory catalog directory") {
+            resolved_count += 1;
         }
+    }
 
-        if let Some(route_catalog) = &mut catalog_locations.route_catalog {
-            if resolve_path_value(&mut route_catalog.directory.path, "route catalog directory") {
-                resolved_count += 1;
-            }
+    if let Some(route_catalog) = &mut catalog_locations.route_catalog {
+        if resolve_path_value(&mut route_catalog.directory.path, "route catalog directory") {
+            resolved_count += 1;
         }
     }
 
@@ -340,26 +338,23 @@ fn process_scenario(input_file: &str) -> Result<PathBuf, Box<dyn std::error::Err
             }
 
             // Step 3: Check if scenario uses catalogs
-            if let Some(catalog_locations) = document.catalog_locations.clone() {
-                if catalog_locations.vehicle_catalog.is_some() || 
-                   catalog_locations.pedestrian_catalog.is_some() ||
-                   catalog_locations.misc_object_catalog.is_some() ||
-                   catalog_locations.controller_catalog.is_some() {
-                    println!("\n🗂️  Catalog locations found - proceeding with resolution:");
+            let catalog_locations = document.catalog_locations.clone();
+            if catalog_locations.vehicle_catalog.is_some() || 
+               catalog_locations.pedestrian_catalog.is_some() ||
+               catalog_locations.misc_object_catalog.is_some() ||
+               catalog_locations.controller_catalog.is_some() {
+                println!("\n🗂️  Catalog locations found - proceeding with resolution:");
 
-                    // Get the base directory for relative catalog paths
-                    let base_dir = input_path.parent().unwrap_or(Path::new("."));
+                // Get the base directory for relative catalog paths
+                let base_dir = input_path.parent().unwrap_or(Path::new("."));
 
-                    // Resolve catalog references using the new simple resolver
-                    resolve_catalog_references_simple(
-                        &mut document,
-                        &catalog_locations,
-                        &scenario_parameters,
-                        base_dir,
-                    )?;
-                } else {
-                    println!("\n💡 No catalog locations found - scenario uses inline entities only");
-                }
+                // Resolve catalog references using the new simple resolver
+                resolve_catalog_references_simple(
+                    &mut document,
+                    &catalog_locations,
+                    &scenario_parameters,
+                    base_dir,
+                )?;
             } else {
                 println!("\n💡 No catalog locations found - scenario uses inline entities only");
             }
@@ -598,14 +593,11 @@ fn print_resolution_summary(document: &openscenario_rs::types::scenario::storybo
                 println!("   🎮 Controller catalog references: 0");
             }
 
-            let has_catalogs = if let Some(catalog_locations) = &document.catalog_locations {
-                catalog_locations.vehicle_catalog.is_some() ||
+            let catalog_locations = &document.catalog_locations;
+            let has_catalogs = catalog_locations.vehicle_catalog.is_some() ||
                 catalog_locations.pedestrian_catalog.is_some() ||
                 catalog_locations.misc_object_catalog.is_some() ||
-                catalog_locations.controller_catalog.is_some()
-            } else {
-                false
-            };
+                catalog_locations.controller_catalog.is_some();
 
             println!(
                 "   🗂️  Catalog locations: {}",

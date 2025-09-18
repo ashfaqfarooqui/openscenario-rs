@@ -3,8 +3,9 @@
 //! This example demonstrates the usage of AccelerationCondition and StandStillCondition
 //! for motion-based scenario triggering in OpenSCENARIO files.
 
-use openscenario_rs::types::conditions::entity::{AccelerationCondition, ByEntityCondition, StandStillCondition};
+use openscenario_rs::types::conditions::entity::{AccelerationCondition, ByEntityCondition, EntityCondition, StandStillCondition};
 use openscenario_rs::types::enums::{DirectionalDimension, Rule};
+use openscenario_rs::types::scenario::triggers::TriggeringEntities;
 
 fn main() {
     println!("=== Motion Conditions Demo ===\n");
@@ -49,10 +50,12 @@ fn main() {
     // 4. Using conditions in ByEntityCondition enum
     println!("\n4. ByEntityCondition Integration:");
     
+    let triggering_entities = TriggeringEntities::default();
     let conditions = vec![
-        ByEntityCondition::acceleration(4.0, Rule::GreaterThan),
-        ByEntityCondition::standstill(3.0),
+        ByEntityCondition::acceleration(triggering_entities.clone(), 4.0, Rule::GreaterThan),
+        ByEntityCondition::standstill(triggering_entities.clone(), 3.0),
         ByEntityCondition::acceleration_with_direction(
+            triggering_entities.clone(),
             2.5,
             Rule::LessThan,
             DirectionalDimension::Lateral,
@@ -60,15 +63,15 @@ fn main() {
     ];
 
     for (i, condition) in conditions.iter().enumerate() {
-        match condition {
-            ByEntityCondition::Acceleration(acc) => {
+        match &condition.entity_condition {
+            EntityCondition::Acceleration(acc) => {
                 println!("   Condition {}: Acceleration {:?} {:?}", 
                     i + 1, acc.rule, acc.value);
                 if let Some(dir) = &acc.direction {
                     println!("      Direction: {:?}", dir);
                 }
             }
-            ByEntityCondition::StandStill(standstill) => {
+            EntityCondition::StandStill(standstill) => {
                 println!("   Condition {}: StandStill for {:?} seconds", 
                     i + 1, standstill.duration);
             }

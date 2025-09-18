@@ -876,7 +876,7 @@ mod tests {
         let source =
             TrafficSourceAction::new(15.0, Position::default(), TrafficDefinition::default());
 
-        assert_eq!(source.rate, 15.0);
+        assert_eq!(source.rate, Double::literal(15.0));
         assert!(source.velocity.is_none());
     }
 
@@ -889,16 +889,16 @@ mod tests {
             TrafficDefinition::default(),
         );
 
-        assert_eq!(source.rate, 20.0);
-        assert_eq!(source.velocity, Some(60.0));
+        assert_eq!(source.rate, Double::literal(20.0));
+        assert_eq!(source.velocity, Some(Double::literal(60.0)));
     }
 
     #[test]
     fn test_traffic_sink_action_creation() {
         let sink = TrafficSinkAction::new(10.0, 30.0, Position::default());
 
-        assert_eq!(sink.rate, 10.0);
-        assert_eq!(sink.radius, 30.0);
+        assert_eq!(sink.rate, Double::literal(10.0));
+        assert_eq!(sink.radius, Double::literal(30.0));
         assert!(sink.traffic_definition.is_none());
     }
 
@@ -911,8 +911,8 @@ mod tests {
             TrafficDefinition::default(),
         );
 
-        assert_eq!(sink.rate, 12.0);
-        assert_eq!(sink.radius, 40.0);
+        assert_eq!(sink.rate, Double::literal(12.0));
+        assert_eq!(sink.radius, Double::literal(40.0));
         assert!(sink.traffic_definition.is_some());
     }
 
@@ -1066,12 +1066,12 @@ mod tests {
     #[test]
     fn test_traffic_action_defaults() {
         let source = TrafficSourceAction::default();
-        assert_eq!(source.rate, 10.0);
-        assert_eq!(source.velocity, Some(50.0));
+        assert_eq!(source.rate, Double::literal(10.0));
+        assert_eq!(source.velocity, Some(Double::literal(50.0)));
 
         let sink = TrafficSinkAction::default();
-        assert_eq!(sink.rate, 10.0);
-        assert_eq!(sink.radius, 50.0);
+        assert_eq!(sink.rate, Double::literal(10.0));
+        assert_eq!(sink.radius, Double::literal(50.0));
 
         let swarm = TrafficSwarmAction::default();
         assert_eq!(swarm.number_of_vehicles.as_literal(), Some(&20));

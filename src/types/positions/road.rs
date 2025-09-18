@@ -481,7 +481,7 @@ mod tests {
         let pos = RelativeLanePosition::new("EgoVehicle".to_string(), -1, 15.0, 0.5);
 
         assert_eq!(pos.entity_ref.as_literal().unwrap(), "EgoVehicle");
-        assert_eq!(pos.d_lane, -1);
+        assert_eq!(pos.d_lane, Int::literal(-1));
         assert_eq!(pos.ds.as_literal().unwrap(), &15.0);
         assert_eq!(pos.offset.as_literal().unwrap(), &0.5);
         assert!(pos.orientation.is_none());
@@ -493,7 +493,7 @@ mod tests {
         let pos = RelativeLanePosition::with_orientation("EgoVehicle".to_string(), 1, 20.0, -1.0, orientation);
 
         assert_eq!(pos.entity_ref.as_literal().unwrap(), "EgoVehicle");
-        assert_eq!(pos.d_lane, 1);
+        assert_eq!(pos.d_lane, Int::literal(1));
         assert_eq!(pos.ds.as_literal().unwrap(), &20.0);
         assert_eq!(pos.offset.as_literal().unwrap(), &-1.0);
         assert!(pos.orientation.is_some());
@@ -535,7 +535,7 @@ mod tests {
 
         let rel_lane = RelativeLanePosition::default();
         assert_eq!(rel_lane.entity_ref.as_literal().unwrap(), "DefaultEntity");
-        assert_eq!(rel_lane.d_lane, 0);
+        assert_eq!(rel_lane.d_lane, Int::literal(0));
         assert_eq!(rel_lane.ds.as_literal().unwrap(), &0.0);
         assert_eq!(rel_lane.offset.as_literal().unwrap(), &0.0);
     }
