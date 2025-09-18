@@ -10,7 +10,7 @@ pub mod variables;
 // Re-export main types for convenience
 pub use init::{
     Actions, EnvironmentAction, GlobalAction, Init, LongitudinalAction, LongitudinalActionType,
-    Private, PrivateAction, PrivateActionType,
+    Private, PrivateAction,
 };
 pub use monitors::{MonitorDeclaration, MonitorDeclarations};
 pub use story::{Act, Actors, EntityRef, Event, Maneuver, ManeuverGroup, ScenarioStory};
@@ -42,9 +42,9 @@ pub struct ScenarioDefinition {
         skip_serializing_if = "Option::is_none"
     )]
     pub monitor_declarations: Option<MonitorDeclarations>,
-    #[serde(rename = "CatalogLocations")]
+    #[serde(rename = "CatalogLocations", default)]
     pub catalog_locations: CatalogLocations,
-    #[serde(rename = "RoadNetwork")]
+    #[serde(rename = "RoadNetwork", default)]
     pub road_network: RoadNetwork,
     #[serde(rename = "Entities")]
     pub entities: Entities,
@@ -110,8 +110,8 @@ impl ScenarioDefinition {
                 parameter_declarations: scenario.parameter_declarations.clone(),
                 variable_declarations: scenario.variable_declarations.clone(),
                 monitor_declarations: scenario.monitor_declarations.clone(),
-                catalog_locations: scenario.catalog_locations.clone(),
-                road_network: scenario.road_network.clone(),
+                catalog_locations: scenario.catalog_locations.clone().unwrap_or_default(),
+                road_network: scenario.road_network.clone().unwrap_or_default(),
                 entities: scenario.entities.clone().unwrap_or_default(),
                 storyboard: scenario.storyboard.clone().unwrap_or_default(),
             })

@@ -36,11 +36,19 @@ pub struct OpenScenario {
     )]
     pub monitor_declarations: Option<MonitorDeclarations>,
 
-    #[serde(rename = "CatalogLocations")]
-    pub catalog_locations: crate::types::catalogs::locations::CatalogLocations,
+    #[serde(
+        rename = "CatalogLocations",
+        skip_serializing_if = "Option::is_none",
+        default
+    )]
+    pub catalog_locations: Option<crate::types::catalogs::locations::CatalogLocations>,
 
-    #[serde(rename = "RoadNetwork")]
-    pub road_network: crate::types::road::RoadNetwork,
+    #[serde(
+        rename = "RoadNetwork",
+        skip_serializing_if = "Option::is_none",
+        default
+    )]
+    pub road_network: Option<crate::types::road::RoadNetwork>,
 
     #[serde(
         rename = "Entities",
@@ -133,10 +141,10 @@ pub struct ScenarioDefinition {
     )]
     pub monitor_declarations: Option<MonitorDeclarations>,
 
-    #[serde(rename = "CatalogLocations")]
+    #[serde(rename = "CatalogLocations", default)]
     pub catalog_locations: crate::types::catalogs::locations::CatalogLocations,
 
-    #[serde(rename = "RoadNetwork")]
+    #[serde(rename = "RoadNetwork", default)]
     pub road_network: crate::types::road::RoadNetwork,
 
     #[serde(rename = "Entities")]
@@ -211,8 +219,8 @@ impl Default for OpenScenario {
             parameter_declarations: Some(ParameterDeclarations::default()),
             variable_declarations: None,
             monitor_declarations: None,
-            catalog_locations: crate::types::catalogs::locations::CatalogLocations::default(),
-            road_network: crate::types::road::RoadNetwork::default(),
+            catalog_locations: Some(crate::types::catalogs::locations::CatalogLocations::default()),
+            road_network: Some(crate::types::road::RoadNetwork::default()),
             entities: Some(Entities::default()),
             storyboard: Some(Storyboard::default()),
             // Parameter variation elements

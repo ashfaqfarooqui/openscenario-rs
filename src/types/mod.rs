@@ -50,9 +50,12 @@ pub use enums::{
 };
 pub use environment::{Environment, Fog, Precipitation, RoadCondition, Sun, TimeOfDay, Weather};
 pub use scenario::init::{
-    Actions, EnvironmentAction, GlobalAction, Init, LongitudinalAction, Private, PrivateAction, PrivateActionType,
+    Actions, EnvironmentAction, GlobalAction, Init, LongitudinalAction, Private, PrivateAction,
 };
-pub use scenario::storyboard::{FileHeader, OpenScenario, OpenScenarioDocumentType, ScenarioDefinition, CatalogDefinition, Storyboard};
+pub use scenario::storyboard::{
+    CatalogDefinition, FileHeader, OpenScenario, OpenScenarioDocumentType, ScenarioDefinition,
+    Storyboard,
+};
 
 // Re-export distribution types
 pub use distributions::{
@@ -101,15 +104,16 @@ pub use catalogs::locations::{
 
 // Re-export condition types
 pub use conditions::{
-    AccelerationCondition, ByEntityCondition, ByValueCondition, DistanceCondition, ReachPositionCondition,
-    RelativeDistanceCondition, SimulationTimeCondition, SpeedCondition, StandStillCondition,
+    AccelerationCondition, ByEntityCondition, ByValueCondition, DistanceCondition,
+    ReachPositionCondition, RelativeDistanceCondition, SimulationTimeCondition, SpeedCondition,
+    StandStillCondition,
 };
 
 // Re-export routing types
 pub use routing::{Route, RouteRef, Waypoint};
 
 // Re-export entity types
-pub use entities::{Vehicle, Pedestrian, Entities, ScenarioObject, Axle, Axles};
+pub use entities::{Axle, Axles, Entities, Pedestrian, ScenarioObject, Vehicle};
 
 /// Common trait for types that support validation
 ///
