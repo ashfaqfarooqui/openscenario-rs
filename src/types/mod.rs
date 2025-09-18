@@ -50,8 +50,7 @@ pub use enums::{
 };
 pub use environment::{Environment, Fog, Precipitation, RoadCondition, Sun, TimeOfDay, Weather};
 pub use scenario::init::{
-    Actions, EnvironmentAction, GlobalAction, Init, LongitudinalAction, Private, PrivateActionType,
-    PrivateActionWrapper,
+    Actions, EnvironmentAction, GlobalAction, Init, LongitudinalAction, Private, PrivateAction, PrivateActionType,
 };
 pub use scenario::storyboard::{FileHeader, OpenScenario, OpenScenarioDocumentType, ScenarioDefinition, CatalogDefinition, Storyboard};
 

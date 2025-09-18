@@ -1,0 +1,409 @@
+{
+  "files": [
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_1_1_free_driving_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'Entities': This element is not expected. Expected is one of ( ParameterDeclarations, VariableDeclarations, MonitorDeclarations, CatalogLocations, Catalog, ParameterValueDistribution ).",
+          "type": "ElementNotAllowed"
+        }
+      ],
+      "path": "output/simple_scenario_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'Entities': This element is not expected. Expected is one of ( ParameterDeclarations, VariableDeclarations, MonitorDeclarations, CatalogLocations, Catalog, ParameterValueDistribution ).",
+          "type": "ElementNotAllowed"
+        }
+      ],
+      "path": "output/test_controller_scenario_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'Entities': This element is not expected. Expected is one of ( ParameterDeclarations, VariableDeclarations, MonitorDeclarations, CatalogLocations, Catalog, ParameterValueDistribution ).",
+          "type": "ElementNotAllowed"
+        }
+      ],
+      "path": "output/test_missing_controller_type_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'LongitudinalAction': Missing child element(s). Expected is one of ( SpeedAction, LongitudinalDistanceAction, SpeedProfileAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'ByValueCondition': Missing child element(s). Expected is one of ( ParameterCondition, TimeOfDayCondition, SimulationTimeCondition, StoryboardElementStateCondition, UserDefinedValueCondition, TrafficSignalCondition, TrafficSignalControllerCondition, VariableCondition ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'ByValueCondition': Missing child element(s). Expected is one of ( ParameterCondition, TimeOfDayCondition, SimulationTimeCondition, StoryboardElementStateCondition, UserDefinedValueCondition, TrafficSignalCondition, TrafficSignalControllerCondition, VariableCondition ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'ByValueCondition': Missing child element(s). Expected is one of ( ParameterCondition, TimeOfDayCondition, SimulationTimeCondition, StoryboardElementStateCondition, UserDefinedValueCondition, TrafficSignalCondition, TrafficSignalControllerCondition, VariableCondition ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_1_2_swerving_lead_vehicle_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_1_3_side_vehicle_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'LongitudinalAction': Missing child element(s). Expected is one of ( SpeedAction, LongitudinalDistanceAction, SpeedProfileAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'ByValueCondition': Missing child element(s). Expected is one of ( ParameterCondition, TimeOfDayCondition, SimulationTimeCondition, StoryboardElementStateCondition, UserDefinedValueCondition, TrafficSignalCondition, TrafficSignalControllerCondition, VariableCondition ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_3_2_follow_lead_vehicle_emergency_brake_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'LongitudinalAction': Missing child element(s). Expected is one of ( SpeedAction, LongitudinalDistanceAction, SpeedProfileAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'ByValueCondition': Missing child element(s). Expected is one of ( ParameterCondition, TimeOfDayCondition, SimulationTimeCondition, StoryboardElementStateCondition, UserDefinedValueCondition, TrafficSignalCondition, TrafficSignalControllerCondition, VariableCondition ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'ByValueCondition': Missing child element(s). Expected is one of ( ParameterCondition, TimeOfDayCondition, SimulationTimeCondition, StoryboardElementStateCondition, UserDefinedValueCondition, TrafficSignalCondition, TrafficSignalControllerCondition, VariableCondition ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_3_1_follow_lead_vehicle_comfortable_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_6_2_lateral_detection_range_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'RoadNetwork': This element is not expected. Expected is one of ( VariableDeclarations, MonitorDeclarations, CatalogLocations ).",
+          "type": "ElementNotAllowed"
+        }
+      ],
+      "path": "output/cut_in_0_exam_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'RoadNetwork': This element is not expected. Expected is one of ( VariableDeclarations, MonitorDeclarations, CatalogLocations ).",
+          "type": "ElementNotAllowed"
+        }
+      ],
+      "path": "output/cut_in_200_exam_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'RoadNetwork': This element is not expected. Expected is one of ( VariableDeclarations, MonitorDeclarations, CatalogLocations ).",
+          "type": "ElementNotAllowed"
+        }
+      ],
+      "path": "output/cut_in_240_exam_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_2_4_multiple_blocking_targets_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_2_1_fully_blocking_target_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_2_2_partially_blocking_target_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'FollowTrajectoryAction': Missing child element(s). Expected is one of ( Trajectory, CatalogReference, TimeReference, TrajectoryRef ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'ByEntityCondition': Missing child element(s). Expected is one of ( TriggeringEntities, EntityCondition ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_2_3_crossing_pedestrian_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'LongitudinalAction': Missing child element(s). Expected is one of ( SpeedAction, LongitudinalDistanceAction, SpeedProfileAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'ByEntityCondition': Missing child element(s). Expected is one of ( TriggeringEntities, EntityCondition ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_5_1_cut_out_fully_blocking_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'LongitudinalAction': Missing child element(s). Expected is one of ( SpeedAction, LongitudinalDistanceAction, SpeedProfileAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        },
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'ByEntityCondition': Missing child element(s). Expected is one of ( TriggeringEntities, EntityCondition ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_5_2_cut_out_multiple_blocking_targets_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'PrivateAction': Missing child element(s). Expected is one of ( LongitudinalAction, LateralAction, VisibilityAction, SynchronizeAction, ActivateControllerAction, ControllerAction, TeleportAction, RoutingAction, AppearanceAction, TrailerAction ).",
+          "type": "ValidationError"
+        }
+      ],
+      "path": "output/alks_scenario_4_6_1_forward_detection_range_template_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [],
+      "path": "output/alks_scenario_4_1_2_swerving_lead_vehicle_variation_resolved.xosc",
+      "valid": true
+    },
+    {
+      "errors": [],
+      "path": "output/alks_scenario_4_1_3_side_vehicle_variation_resolved.xosc",
+      "valid": true
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'Entities': This element is not expected. Expected is one of ( VariableDeclarations, MonitorDeclarations, CatalogLocations ).",
+          "type": "ElementNotAllowed"
+        }
+      ],
+      "path": "output/minimal_test_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [
+        {
+          "column": null,
+          "line": 2,
+          "message": "Element 'Entities': This element is not expected. Expected is one of ( ParameterDeclarations, VariableDeclarations, MonitorDeclarations, CatalogLocations, Catalog, ParameterValueDistribution ).",
+          "type": "ElementNotAllowed"
+        }
+      ],
+      "path": "output/expressions_scenario_resolved.xosc",
+      "valid": false
+    },
+    {
+      "errors": [],
+      "path": "output/alks_scenario_4_4_1_cut_in_no_collision_variation_resolved.xosc",
+      "valid": true
+    }
+  ],
+  "summary": {
+    "invalid": 21,
+    "total": 24,
+    "total_errors": 43,
+    "valid": 3
+  }
+}

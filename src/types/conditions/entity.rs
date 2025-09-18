@@ -259,33 +259,16 @@ pub struct TimeToCollisionTarget {
 }
 
 /// Entity-based condition types
+/// XSD requires both TriggeringEntities and EntityCondition as required fields
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(untagged)]
-pub enum ByEntityCondition {
-    /// Schema-compliant structure with TriggeringEntities and EntityCondition
-    SchemaCompliant(ByEntityConditionSchema),
-    /// Legacy speed-based condition
-    Speed(SpeedCondition),
-    /// Legacy position reach condition (deprecated but supported)
-    ReachPosition(ReachPositionCondition),
-    /// Legacy distance to position condition
-    Distance(DistanceCondition),
-    /// Legacy relative distance between entities condition
-    RelativeDistance(RelativeDistanceCondition),
-    /// Legacy acceleration-based condition
-    Acceleration(AccelerationCondition),
-    /// Legacy standstill detection condition
-    StandStill(StandStillCondition),
-    /// Legacy collision detection condition
-    Collision(CollisionCondition),
-    /// Legacy off-road detection condition
-    OffRoad(OffRoadCondition),
-    /// Legacy end-of-road detection condition
-    EndOfRoad(EndOfRoadCondition),
-    /// Legacy time headway condition
-    TimeHeadway(TimeHeadwayCondition),
-    /// Legacy time to collision condition
-    TimeToCollision(TimeToCollisionCondition),
+pub struct ByEntityCondition {
+    /// Entities that can trigger this condition
+    #[serde(rename = "TriggeringEntities")]
+    pub triggering_entities: TriggeringEntities,
+    
+    /// The actual entity condition
+    #[serde(rename = "EntityCondition")]
+    pub entity_condition: EntityCondition,
 }
 
 /// EntityCondition enum for the actual condition types inside ByEntityConditionSchema
@@ -326,17 +309,7 @@ pub enum EntityCondition {
     TimeToCollision(TimeToCollisionCondition),
 }
 
-/// Schema-compliant ByEntityCondition structure matching OpenSCENARIO XSD
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ByEntityConditionSchema {
-    /// Entities that can trigger this condition
-    #[serde(rename = "TriggeringEntities")]
-    pub triggering_entities: TriggeringEntities,
-    
-    /// The actual entity condition
-    #[serde(rename = "EntityCondition")]
-    pub entity_condition: EntityCondition,
-}
+
 
 impl Default for SpeedCondition {
     fn default() -> Self {
@@ -887,128 +860,149 @@ impl Default for EntityCondition {
     }
 }
 
-impl Default for ByEntityConditionSchema {
+
+
+impl Default for ByEntityCondition {
     fn default() -> Self {
-        ByEntityConditionSchema {
+        Self {
             triggering_entities: TriggeringEntities::default(),
             entity_condition: EntityCondition::default(),
         }
     }
 }
 
-impl Default for ByEntityCondition {
-    fn default() -> Self {
-        ByEntityCondition::Speed(SpeedCondition::default())
-    }
-}
-
 // Convenience constructors for ByEntityCondition
 impl ByEntityCondition {
+    /// Create a new ByEntityCondition with triggering entities and entity condition
+    pub fn new(triggering_entities: TriggeringEntities, entity_condition: EntityCondition) -> Self {
+        Self {
+            triggering_entities,
+            entity_condition,
+        }
+    }
+    
     /// Create a speed condition
-    pub fn speed(value: f64, rule: Rule, entity_ref: impl Into<String>) -> Self {
-        ByEntityCondition::Speed(SpeedCondition {
+    pub fn speed(triggering_entities: TriggeringEntities, value: f64, rule: Rule, entity_ref: impl Into<String>) -> Self {
+        let speed_condition = SpeedCondition {
             value: Double::literal(value),
             rule,
             entity_ref: entity_ref.into(),
-        })
+        };
+        Self::new(triggering_entities, EntityCondition::Speed(speed_condition))
     }
     
     /// Create a reach position condition
-    pub fn reach_position(position: Position, tolerance: f64) -> Self {
-        ByEntityCondition::ReachPosition(ReachPositionCondition::new(position, tolerance))
+    pub fn reach_position(triggering_entities: TriggeringEntities, position: Position, tolerance: f64) -> Self {
+        let reach_condition = ReachPositionCondition::new(position, tolerance);
+        Self::new(triggering_entities, EntityCondition::ReachPosition(reach_condition))
     }
     
     /// Create a distance condition
     pub fn distance(
+        triggering_entities: TriggeringEntities,
         position: Position,
         value: f64,
         freespace: bool,
         rule: Rule,
     ) -> Self {
-        ByEntityCondition::Distance(DistanceCondition::new(position, value, freespace, rule))
+        let distance_condition = DistanceCondition::new(position, value, freespace, rule);
+        Self::new(triggering_entities, EntityCondition::Distance(distance_condition))
     }
     
     /// Create a relative distance condition
     pub fn relative_distance(
+        triggering_entities: TriggeringEntities,
         entity_ref: &str,
         value: f64,
         freespace: bool,
         distance_type: RelativeDistanceType,
         rule: Rule,
     ) -> Self {
-        ByEntityCondition::RelativeDistance(RelativeDistanceCondition::new(
+        let relative_distance_condition = RelativeDistanceCondition::new(
             entity_ref,
             value,
             freespace,
             distance_type,
             rule,
-        ))
+        );
+        Self::new(triggering_entities, EntityCondition::RelativeDistance(relative_distance_condition))
     }
     
     /// Create an acceleration condition
-    pub fn acceleration(value: f64, rule: Rule) -> Self {
-        ByEntityCondition::Acceleration(AccelerationCondition::new(value, rule))
+    pub fn acceleration(triggering_entities: TriggeringEntities, value: f64, rule: Rule) -> Self {
+        let acceleration_condition = AccelerationCondition::new(value, rule);
+        Self::new(triggering_entities, EntityCondition::Acceleration(acceleration_condition))
     }
     
     /// Create an acceleration condition with direction
     pub fn acceleration_with_direction(
+        triggering_entities: TriggeringEntities,
         value: f64,
         rule: Rule,
         direction: DirectionalDimension,
     ) -> Self {
-        ByEntityCondition::Acceleration(
-            AccelerationCondition::new(value, rule).with_direction(direction)
-        )
+        let acceleration_condition = AccelerationCondition::new(value, rule).with_direction(direction);
+        Self::new(triggering_entities, EntityCondition::Acceleration(acceleration_condition))
     }
     
     /// Create a standstill condition
-    pub fn standstill(duration: f64) -> Self {
-        ByEntityCondition::StandStill(StandStillCondition::new(duration))
+    pub fn standstill(triggering_entities: TriggeringEntities, duration: f64) -> Self {
+        let standstill_condition = StandStillCondition::new(duration);
+        Self::new(triggering_entities, EntityCondition::StandStill(standstill_condition))
     }
     
     /// Create a collision condition with specific target
-    pub fn collision_with_target(target: &str) -> Self {
-        ByEntityCondition::Collision(CollisionCondition::with_target(target))
+    pub fn collision_with_target(triggering_entities: TriggeringEntities, target: &str) -> Self {
+        let collision_condition = CollisionCondition::with_target(target);
+        Self::new(triggering_entities, EntityCondition::Collision(collision_condition))
     }
     
     /// Create a collision condition for entity type
-    pub fn collision_with_type(entity_type: &str) -> Self {
-        ByEntityCondition::Collision(CollisionCondition::with_type(entity_type))
+    pub fn collision_with_type(triggering_entities: TriggeringEntities, entity_type: &str) -> Self {
+        let collision_condition = CollisionCondition::with_type(entity_type);
+        Self::new(triggering_entities, EntityCondition::Collision(collision_condition))
     }
     
     /// Create a collision condition at position
-    pub fn collision_at_position(position: Position) -> Self {
-        ByEntityCondition::Collision(CollisionCondition::at_position(position))
+    pub fn collision_at_position(triggering_entities: TriggeringEntities, position: Position) -> Self {
+        let collision_condition = CollisionCondition::at_position(position);
+        Self::new(triggering_entities, EntityCondition::Collision(collision_condition))
     }
     
     /// Create a general collision condition
-    pub fn collision() -> Self {
-        ByEntityCondition::Collision(CollisionCondition::any_collision())
+    pub fn collision(triggering_entities: TriggeringEntities) -> Self {
+        let collision_condition = CollisionCondition::any_collision();
+        Self::new(triggering_entities, EntityCondition::Collision(collision_condition))
     }
     
     /// Create an off-road condition
-    pub fn off_road(duration: f64) -> Self {
-        ByEntityCondition::OffRoad(OffRoadCondition::new(duration))
+    pub fn off_road(triggering_entities: TriggeringEntities, duration: f64) -> Self {
+        let off_road_condition = OffRoadCondition::new(duration);
+        Self::new(triggering_entities, EntityCondition::OffRoad(off_road_condition))
     }
     
     /// Create an end-of-road condition
-    pub fn end_of_road(duration: f64) -> Self {
-        ByEntityCondition::EndOfRoad(EndOfRoadCondition::new(duration))
+    pub fn end_of_road(triggering_entities: TriggeringEntities, duration: f64) -> Self {
+        let end_of_road_condition = EndOfRoadCondition::new(duration);
+        Self::new(triggering_entities, EntityCondition::EndOfRoad(end_of_road_condition))
     }
     
     /// Create a time headway condition
-    pub fn time_headway(entity_ref: &str, value: f64, rule: Rule, freespace: bool) -> Self {
-        ByEntityCondition::TimeHeadway(TimeHeadwayCondition::new(entity_ref, value, rule, freespace))
+    pub fn time_headway(triggering_entities: TriggeringEntities, entity_ref: &str, value: f64, rule: Rule, freespace: bool) -> Self {
+        let time_headway_condition = TimeHeadwayCondition::new(entity_ref, value, rule, freespace);
+        Self::new(triggering_entities, EntityCondition::TimeHeadway(time_headway_condition))
     }
     
     /// Create a time to collision condition with entity target
-    pub fn time_to_collision_entity(entity_ref: &str, value: f64, rule: Rule, freespace: bool) -> Self {
-        ByEntityCondition::TimeToCollision(TimeToCollisionCondition::with_entity_target(entity_ref, value, rule, freespace))
+    pub fn time_to_collision_entity(triggering_entities: TriggeringEntities, entity_ref: &str, value: f64, rule: Rule, freespace: bool) -> Self {
+        let time_to_collision_condition = TimeToCollisionCondition::with_entity_target(entity_ref, value, rule, freespace);
+        Self::new(triggering_entities, EntityCondition::TimeToCollision(time_to_collision_condition))
     }
     
     /// Create a time to collision condition with position target
-    pub fn time_to_collision_position(position: Position, value: f64, rule: Rule, freespace: bool) -> Self {
-        ByEntityCondition::TimeToCollision(TimeToCollisionCondition::with_position_target(position, value, rule, freespace))
+    pub fn time_to_collision_position(triggering_entities: TriggeringEntities, position: Position, value: f64, rule: Rule, freespace: bool) -> Self {
+        let time_to_collision_condition = TimeToCollisionCondition::with_position_target(position, value, rule, freespace);
+        Self::new(triggering_entities, EntityCondition::TimeToCollision(time_to_collision_condition))
     }
 }
 
@@ -1102,9 +1096,10 @@ mod tests {
 
     #[test]
     fn test_by_entity_condition_acceleration() {
-        let condition = ByEntityCondition::acceleration(3.0, Rule::GreaterThan);
-        match condition {
-            ByEntityCondition::Acceleration(acc_condition) => {
+        let triggering_entities = TriggeringEntities::default();
+        let condition = ByEntityCondition::acceleration(triggering_entities, 3.0, Rule::GreaterThan);
+        match condition.entity_condition {
+            EntityCondition::Acceleration(acc_condition) => {
                 assert_eq!(acc_condition.value, Double::literal(3.0));
                 assert_eq!(acc_condition.rule, Rule::GreaterThan);
                 assert_eq!(acc_condition.direction, None);
@@ -1115,13 +1110,15 @@ mod tests {
 
     #[test]
     fn test_by_entity_condition_acceleration_with_direction() {
+        let triggering_entities = TriggeringEntities::default();
         let condition = ByEntityCondition::acceleration_with_direction(
+            triggering_entities,
             2.5,
             Rule::LessThan,
             DirectionalDimension::Lateral,
         );
-        match condition {
-            ByEntityCondition::Acceleration(acc_condition) => {
+        match condition.entity_condition {
+            EntityCondition::Acceleration(acc_condition) => {
                 assert_eq!(acc_condition.value, Double::literal(2.5));
                 assert_eq!(acc_condition.rule, Rule::LessThan);
                 assert_eq!(acc_condition.direction, Some(DirectionalDimension::Lateral));
@@ -1132,9 +1129,10 @@ mod tests {
 
     #[test]
     fn test_by_entity_condition_standstill() {
-        let condition = ByEntityCondition::standstill(4.0);
-        match condition {
-            ByEntityCondition::StandStill(standstill_condition) => {
+        let triggering_entities = TriggeringEntities::default();
+        let condition = ByEntityCondition::standstill(triggering_entities, 4.0);
+        match condition.entity_condition {
+            EntityCondition::StandStill(standstill_condition) => {
                 assert_eq!(standstill_condition.duration, Double::literal(4.0));
             }
             _ => panic!("Expected StandStill variant"),
@@ -1167,16 +1165,17 @@ mod tests {
     #[test]
     fn test_by_entity_condition_enum_variants() {
         // Test that all variants can be created and matched
-        let acceleration = ByEntityCondition::acceleration(1.0, Rule::GreaterThan);
-        let standstill = ByEntityCondition::standstill(2.0);
+        let triggering_entities = TriggeringEntities::default();
+        let acceleration = ByEntityCondition::acceleration(triggering_entities.clone(), 1.0, Rule::GreaterThan);
+        let standstill = ByEntityCondition::standstill(triggering_entities, 2.0);
         
-        match acceleration {
-            ByEntityCondition::Acceleration(_) => (),
+        match acceleration.entity_condition {
+            EntityCondition::Acceleration(_) => (),
             _ => panic!("Expected Acceleration variant"),
         }
         
-        match standstill {
-            ByEntityCondition::StandStill(_) => (),
+        match standstill.entity_condition {
+            EntityCondition::StandStill(_) => (),
             _ => panic!("Expected StandStill variant"),
         }
     }

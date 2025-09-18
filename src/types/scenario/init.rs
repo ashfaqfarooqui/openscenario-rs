@@ -12,7 +12,8 @@
 //! - Providing entity-specific private actions (speed, teleport, etc.)
 //! - Facilitating integration between initialization and story phases
 
-use crate::types::actions::movement::{RoutingAction, SpeedAction, TeleportAction};
+use crate::types::actions::control::ActivateControllerAction;
+use crate::types::actions::movement::{RoutingAction, SpeedAction, SynchronizeAction, TeleportAction};
 use crate::types::basic::OSString;
 use crate::types::environment::Environment;
 use serde::{Deserialize, Serialize};
@@ -55,23 +56,27 @@ pub struct Private {
     #[serde(rename = "@entityRef")]
     pub entity_ref: OSString,
     #[serde(rename = "PrivateAction")]
-    pub private_actions: Vec<PrivateActionWrapper>,
+    pub private_actions: Vec<PrivateAction>,
 }
 
-/// Wrapper for individual private actions with explicit element types
+/// Private actions that can be applied to individual entities
+/// XSD requires exactly one child element (choice group)
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct PrivateActionWrapper {
-    #[serde(rename = "LongitudinalAction", skip_serializing_if = "Option::is_none")]
-    pub longitudinal_action: Option<LongitudinalAction>,
-    #[serde(rename = "LateralAction", skip_serializing_if = "Option::is_none")]
-    pub lateral_action: Option<crate::types::actions::movement::LateralAction>,
-    #[serde(rename = "TeleportAction", skip_serializing_if = "Option::is_none")]
-    pub teleport_action: Option<TeleportAction>,
-    #[serde(rename = "RoutingAction", skip_serializing_if = "Option::is_none")]
-    pub routing_action: Option<RoutingAction>,
+#[serde(rename_all = "PascalCase")]
+pub enum PrivateAction {
+    LongitudinalAction(LongitudinalAction),
+    LateralAction(crate::types::actions::movement::LateralAction),
+    TeleportAction(TeleportAction),
+    RoutingAction(RoutingAction),
+    SynchronizeAction(SynchronizeAction),
+    ActivateControllerAction(ActivateControllerAction),
+    // Note: Other action types like VisibilityAction, ControllerAction, 
+    // AppearanceAction, TrailerAction can be added when implemented
 }
 
 /// Types of private actions available for entity initialization
+/// This is kept for backward compatibility but PrivateAction enum should be used instead
+#[deprecated(note = "Use PrivateAction enum instead")]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "PascalCase")]
 pub enum PrivateActionType {
@@ -79,15 +84,16 @@ pub enum PrivateActionType {
     LateralAction(crate::types::actions::movement::LateralAction),
     TeleportAction(TeleportAction),
     RoutingAction(RoutingAction),
-    // SynchronizeAction, etc. can be added later
+    SynchronizeAction(SynchronizeAction),
 }
 
 /// Longitudinal movement actions (speed control, etc.)
+/// XSD requires exactly one child element (choice group)
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct LongitudinalAction {
-    #[serde(rename = "SpeedAction", skip_serializing_if = "Option::is_none")]
-    pub speed_action: Option<SpeedAction>,
-    // SpeedProfileAction, SynchronizeAction, etc. can be added later as Option fields
+#[serde(rename_all = "PascalCase")]
+pub enum LongitudinalAction {
+    SpeedAction(SpeedAction),
+    // Note: LongitudinalDistanceAction, SpeedProfileAction can be added when implemented
 }
 
 /// Types of longitudinal actions
@@ -115,22 +121,15 @@ impl Default for Private {
     }
 }
 
-impl Default for PrivateActionWrapper {
+impl Default for PrivateAction {
     fn default() -> Self {
-        Self {
-            longitudinal_action: Some(LongitudinalAction::default()),
-            lateral_action: None,
-            teleport_action: None,
-            routing_action: None,
-        }
+        Self::LongitudinalAction(LongitudinalAction::default())
     }
 }
 
 impl Default for LongitudinalAction {
     fn default() -> Self {
-        Self {
-            speed_action: Some(SpeedAction::default()),
-        }
+        Self::SpeedAction(SpeedAction::default())
     }
 }
 
@@ -144,7 +143,7 @@ impl Private {
     }
 
     /// Add a private action to this entity's initialization
-    pub fn add_action(mut self, action: PrivateActionWrapper) -> Self {
+    pub fn add_action(mut self, action: PrivateAction) -> Self {
         self.private_actions.push(action);
         self
     }
@@ -183,20 +182,10 @@ mod tests {
     #[test]
     fn test_private_action_builder() {
         let private = Private::new("TestEntity")
-            .add_action(PrivateActionWrapper {
-                longitudinal_action: Some(LongitudinalAction {
-                    speed_action: Some(SpeedAction::default()),
-                }),
-                lateral_action: None,
-                teleport_action: None,
-                routing_action: None,
-            })
-            .add_action(PrivateActionWrapper {
-                longitudinal_action: None,
-                lateral_action: None,
-                teleport_action: Some(TeleportAction::default()),
-                routing_action: None,
-            });
+            .add_action(PrivateAction::LongitudinalAction(
+                LongitudinalAction::SpeedAction(SpeedAction::default())
+            ))
+            .add_action(PrivateAction::TeleportAction(TeleportAction::default()));
 
         assert_eq!(private.entity_ref.as_literal().unwrap(), "TestEntity");
         assert_eq!(private.private_actions.len(), 2);

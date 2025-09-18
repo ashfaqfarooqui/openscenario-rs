@@ -28,15 +28,15 @@ pub struct SimulationTimeCondition {
 }
 
 /// Value-based condition types
+/// XSD requires exactly one child element (choice group)
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ByValueCondition {
-    /// Simulation time-based condition
-    #[serde(
-        rename = "SimulationTimeCondition",
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub simulation_time: Option<SimulationTimeCondition>,
-    // More value conditions will be added later as optional fields
+#[serde(rename_all = "PascalCase")]
+pub enum ByValueCondition {
+    SimulationTimeCondition(SimulationTimeCondition),
+    // Note: Other condition types like ParameterCondition, TimeOfDayCondition,
+    // StoryboardElementStateCondition, UserDefinedValueCondition, 
+    // TrafficSignalCondition, TrafficSignalControllerCondition, 
+    // VariableCondition can be added when implemented
 }
 
 impl Default for SimulationTimeCondition {
@@ -50,8 +50,6 @@ impl Default for SimulationTimeCondition {
 
 impl Default for ByValueCondition {
     fn default() -> Self {
-        Self {
-            simulation_time: Some(SimulationTimeCondition::default()),
-        }
+        Self::SimulationTimeCondition(SimulationTimeCondition::default())
     }
 }

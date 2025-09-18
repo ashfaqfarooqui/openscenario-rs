@@ -10,7 +10,7 @@ pub mod variables;
 // Re-export main types for convenience
 pub use init::{
     Actions, EnvironmentAction, GlobalAction, Init, LongitudinalAction, LongitudinalActionType,
-    Private, PrivateActionType, PrivateActionWrapper,
+    Private, PrivateAction, PrivateActionType,
 };
 pub use monitors::{MonitorDeclaration, MonitorDeclarations};
 pub use story::{Act, Actors, EntityRef, Event, Maneuver, ManeuverGroup, ScenarioStory};
@@ -110,8 +110,8 @@ impl ScenarioDefinition {
                 parameter_declarations: scenario.parameter_declarations.clone(),
                 variable_declarations: scenario.variable_declarations.clone(),
                 monitor_declarations: scenario.monitor_declarations.clone(),
-                catalog_locations: scenario.catalog_locations.clone().unwrap_or_default(),
-                road_network: scenario.road_network.clone().unwrap_or_default(),
+                catalog_locations: scenario.catalog_locations.clone(),
+                road_network: scenario.road_network.clone(),
                 entities: scenario.entities.clone().unwrap_or_default(),
                 storyboard: scenario.storyboard.clone().unwrap_or_default(),
             })
