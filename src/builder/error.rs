@@ -209,6 +209,26 @@ impl BuilderError {
             max: max.to_string(),
         }
     }
+
+    /// Create a validation error with message
+    /// 
+    /// This helper method creates a validation error for general validation failures.
+    pub fn validation_error(message: &str) -> Self {
+        Self::ConstraintViolation {
+            constraint: "Validation".to_string(),
+            details: message.to_string(),
+        }
+    }
+
+    /// Create a duplicate entity error
+    /// 
+    /// This helper method creates an error for when an entity with the same name already exists.
+    pub fn duplicate_entity(entity_name: &str) -> Self {
+        Self::ConstraintViolation {
+            constraint: "Unique entity names".to_string(),
+            details: format!("Entity '{}' already exists", entity_name),
+        }
+    }
 }
 
 /// Extension trait for converting Results to BuilderResult

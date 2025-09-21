@@ -438,6 +438,31 @@ impl ScenarioBuilder<HasRoadNetwork> {
             catalog_registry: self.catalog_registry,
         }
     }
+
+    /// Start building entities with the new entity builders
+    /// 
+    /// This method creates an EntitiesBuilder that provides fluent APIs
+    /// for adding vehicles, pedestrians, and miscellaneous objects.
+    /// 
+    /// # Returns
+    /// EntitiesBuilder for adding entities
+    /// 
+    /// # Example
+    /// ```rust
+    /// builder.with_entities_builder()
+    ///     .add_vehicle("ego")
+    ///         .car()
+    ///         .at_position().lane("1", 1, 100.0).finish()
+    ///         .finish_vehicle()
+    ///     .add_pedestrian("ped1")
+    ///         .pedestrian()
+    ///         .at_position().world(50.0, 10.0, None).finish()
+    ///         .finish_pedestrian()
+    ///     .finish_entities()
+    /// ```
+    pub fn with_entities_builder(self) -> super::entities::EntitiesBuilder<HasRoadNetwork> {
+        super::entities::EntitiesBuilder::new(self.entity_registry)
+    }
 }
 
 // Methods for building final scenario (available when entities are set)
