@@ -71,7 +71,7 @@ pub use catalog::{
 
 // Feature-gated re-exports
 #[cfg(feature = "builder")]
-pub use builder::scenario::ScenarioBuilder;
+pub use builder::{ScenarioBuilder, CatalogBuilder, ParameterVariationBuilder};
 
 // High-level convenience functions
 use std::path::Path;

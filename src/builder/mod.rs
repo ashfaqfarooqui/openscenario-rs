@@ -9,10 +9,14 @@ pub mod states;
 pub mod error;
 pub mod registry;
 pub mod scenario;
+pub mod catalog;
+pub mod parameter_variation;
 
 // Re-export commonly used types
 pub use error::{BuilderError, BuilderResult};
 pub use scenario::ScenarioBuilder;
+pub use catalog::CatalogBuilder;
+pub use parameter_variation::ParameterVariationBuilder;
 pub use states::*;
 
 // Re-export registry types for advanced usage
