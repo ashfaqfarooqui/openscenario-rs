@@ -9,6 +9,12 @@ repository = "https://github.com/ashfaqfarooqui/openscenario-rs"
 keywords = ["openscenario", "xml", "automotive", "simulation", "asam"]
 categories = [""]
 
+[features]
+default = ["builder"]
+builder = []
+validation = []
+streaming = []
+
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 quick-xml = { version = "0.32", features = ["serialize"] }
@@ -21,6 +27,8 @@ indexmap = { version = "2.0" }
 chrono = { version = "0.4", features = ["serde"] }
 regex = { version = "1.0" }
 markup_fmt = "0.23.4"
+serde_yaml = "0.9"
+log = "0.4"
 
 
 [dev-dependencies]
@@ -32,3 +40,7 @@ serde_json = "1.0.143"
 [[bin]]
 name = "xosc-validate"
 path = "tools/xosc_validate.rs"
+
+[[bench]]
+name = "builder_performance"
+harness = false
