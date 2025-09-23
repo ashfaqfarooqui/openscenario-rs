@@ -1,15 +1,18 @@
 //! Entity builders for programmatic entity construction
 //!
-//! This module provides fluent APIs for creating all types of entities in OpenSCENARIO
+//! This module provides fluent APIs for creating vehicle and pedestrian entities in OpenSCENARIO
 //! scenarios with comprehensive validation and type safety.
+//!
+//! Note: MiscObject entities are not yet supported as the underlying type system
+//! implementation is not complete.
 
 pub mod vehicle;
 pub mod pedestrian;
-pub mod misc_object;
+// pub mod misc_object;  // Removed - MiscObject not implemented in type system yet
 
 pub use vehicle::VehicleBuilder;
 pub use pedestrian::PedestrianBuilder;
-pub use misc_object::MiscObjectBuilder;
+// pub use misc_object::MiscObjectBuilder;  // Removed - MiscObject not implemented in type system yet
 
 use crate::types::entities::{ScenarioObject, Entities};
 use crate::builder::{BuilderError, BuilderResult};

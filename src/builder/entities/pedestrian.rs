@@ -3,9 +3,10 @@
 use crate::types::{
     basic::{Value, Double, OSString},
     entities::{
-        pedestrian::{Pedestrian, PedestrianCategory},
+        Pedestrian,
         ScenarioObject,
     },
+    enums::PedestrianCategory,
     positions::Position,
 };
 use crate::builder::{

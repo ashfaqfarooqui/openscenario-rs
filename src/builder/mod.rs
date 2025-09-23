@@ -116,7 +116,7 @@ pub use states::{
 pub use registry::{EntityRegistry, ParameterRegistry, CatalogRegistry};
 
 // Re-export entity builders
-pub use entities::{VehicleBuilder, PedestrianBuilder, MiscObjectBuilder, EntityBuilder, EntitiesBuilder};
+pub use entities::{VehicleBuilder, PedestrianBuilder, EntityBuilder, EntitiesBuilder};
 
 // Re-export position builders
 pub use positions::{

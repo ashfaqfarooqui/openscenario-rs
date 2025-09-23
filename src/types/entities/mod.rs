@@ -5,13 +5,14 @@ use crate::types::controllers::ObjectController;
 use serde::{Deserialize, Serialize};
 
 pub mod axles;
+pub mod misc_object;
 pub mod pedestrian;
 pub mod vehicle;
 
 // Re-export entity types
 pub use axles::{Axle, Axles};
 pub use pedestrian::Pedestrian;
-pub use vehicle::{Properties, Vehicle};
+pub use vehicle::{Properties, Vehicle, Performance};
 
 /// Union type for all entity objects
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

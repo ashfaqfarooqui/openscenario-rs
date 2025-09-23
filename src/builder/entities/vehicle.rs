@@ -3,13 +3,13 @@
 use crate::types::{
     basic::{Value, Double, OSString},
     entities::{
-        vehicle::{Vehicle, Properties, BoundingBox, Performance, Axles},
-        axles::{Axle},
+        Vehicle, Properties, Performance, Axle, // Axles,
         ScenarioObject,
     },
     enums::{VehicleCategory, Role},
     positions::Position,
 };
+// use crate::types::geometry::shapes::BoundingBox;
 use crate::builder::{
     BuilderError, BuilderResult,
     registry::EntityRegistry,

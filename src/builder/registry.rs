@@ -253,12 +253,13 @@ impl CatalogRegistry {
             }
         }
 
-        if let Some(misc_object_catalog) = &locations.misc_object_catalog {
-            if let Some(path) = misc_object_catalog.directory.path.as_literal() {
-                self.catalog_paths.insert("misc_object".to_string(), path.clone());
-                self.available_catalogs.insert("misc_object".to_string());
-            }
-        }
+        // misc_object catalog support removed - MiscObject not implemented in type system yet
+        // if let Some(misc_object_catalog) = &locations.misc_object_catalog {
+        //     if let Some(path) = misc_object_catalog.directory.path.as_literal() {
+        //         self.catalog_paths.insert("misc_object".to_string(), path.clone());
+        //         self.available_catalogs.insert("misc_object".to_string());
+        //     }
+        // }
 
         if let Some(environment_catalog) = &locations.environment_catalog {
             if let Some(path) = environment_catalog.directory.path.as_literal() {

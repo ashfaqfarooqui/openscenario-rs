@@ -2,8 +2,7 @@
 
 use crate::types::{
     basic::Value,
-    positions::{Position, LanePosition},
-    geometry::shapes::Orientation,
+    positions::{Position, LanePosition, Orientation},
 };
 use crate::builder::{BuilderError, BuilderResult};
 use super::{PositionBuilder, validate_coordinate, validate_angle, validate_road_id};

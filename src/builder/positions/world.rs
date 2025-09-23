@@ -2,8 +2,7 @@
 
 use crate::types::{
     basic::Value,
-    positions::{Position, WorldPosition},
-    geometry::shapes::Orientation,
+    positions::{Position, WorldPosition, Orientation},
 };
 use crate::builder::{BuilderError, BuilderResult};
 use super::{PositionBuilder, validate_coordinate, validate_angle};

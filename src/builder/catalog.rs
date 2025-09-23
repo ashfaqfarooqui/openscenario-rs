@@ -152,7 +152,7 @@ impl CatalogBuilder<HasHeader> {
             vehicles: self.catalog_data.vehicles,
             controllers: self.catalog_data.controllers,
             pedestrians: self.catalog_data.pedestrians,
-            misc_objects: Vec::new(), // Not implemented in this phase
+            misc_objects: Vec::new(), // MiscObject type not implemented in deserialization layer yet
             environments: self.catalog_data.environments,
             maneuvers: self.catalog_data.maneuvers,
             trajectories: self.catalog_data.trajectories,
