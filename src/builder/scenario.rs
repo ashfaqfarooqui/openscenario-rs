@@ -3,12 +3,12 @@
 //! This module provides the main ScenarioBuilder with type-safe state transitions,
 //! comprehensive validation, and integration with the existing type system.
 //!
-//! # Performance Optimizations
+//! # Type Safety
 //!
-//! - Memory-efficient struct layout with cache-friendly field ordering
-//! - Copy-on-write for large data structures to reduce cloning
-//! - Lazy validation to defer expensive operations
-//! - Bulk operations for adding multiple entities efficiently
+//! - Compile-time prevention of invalid state transitions
+//! - Rich error handling with helpful suggestions
+//! - Comprehensive validation with registry tracking
+//! - Integration with existing OpenSCENARIO type system
 
 use crate::types::{
     basic::{ParameterDeclarations, Value},
@@ -26,10 +26,8 @@ use super::{
     error::{BuilderError, BuilderResult},
     registry::{EntityRegistry, ParameterRegistry, CatalogRegistry},
     states::*,
-    performance::{CowData, PerformanceTimer, record_build_metrics, BulkOperations},
 };
 use std::marker::PhantomData;
-use std::time::Instant;
 
 /// Main scenario builder with type-safe state transitions
 pub struct ScenarioBuilder<S: BuilderState> {

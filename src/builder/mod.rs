@@ -97,10 +97,7 @@ pub mod conditions;
 pub mod triggers;
 pub mod events;
 pub mod storyboard;
-pub mod performance;
-pub mod diagnostics;
-pub mod macros;
-pub mod templates;
+
 
 // Re-export main types for convenience
 pub use error::{BuilderError, BuilderResult};
