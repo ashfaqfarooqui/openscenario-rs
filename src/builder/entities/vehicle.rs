@@ -9,7 +9,7 @@ use crate::types::{
     enums::{VehicleCategory, Role},
     positions::Position,
 };
-// use crate::types::geometry::shapes::BoundingBox;
+use crate::types::geometry::BoundingBox;
 use crate::builder::{
     BuilderError, BuilderResult,
     registry::EntityRegistry,

@@ -234,13 +234,7 @@ impl TeleportActionBuilder {
     }
 }
 
-// Implement PositionTarget for TeleportActionBuilder
-impl crate::builder::positions::PositionTarget for TeleportActionBuilder {
-    fn set_position(mut self, position: crate::types::positions::Position) -> Self {
-        self.position = Some(position);
-        self
-    }
-}
+// PositionTarget trait implementation removed - trait doesn't exist
 
 /// Builder for longitudinal actions within events
 pub struct LongitudinalActionBuilder {
@@ -284,21 +278,21 @@ impl LongitudinalActionBuilder {
         })?;
 
         use crate::types::scenario::init::LongitudinalAction;
-        use crate::types::actions::movement::{SpeedAction, LongitudinalDistanceAction, SpeedActionDynamics, AbsoluteSpeedAction};
+        use crate::types::actions::movement::{SpeedAction, LongitudinalDistanceAction, TransitionDynamics, AbsoluteTargetSpeed};
 
         let longitudinal_action = match action_type {
             LongitudinalActionType::Speed { target, dynamics } => {
                 let speed_action = SpeedAction {
-                    speed_action_dynamics: SpeedActionDynamics {
+                    speed_action_dynamics: TransitionDynamics {
+                        dynamics_dimension: crate::types::enums::DynamicsDimension::Time,
                         dynamics_shape: crate::types::enums::DynamicsShape::Linear,
-                        value: crate::types::basic::Value::literal(1.0), // Default rate
-                        following_mode: None,
+                        value: crate::types::basic::Double::literal(1.0), // Default rate
                     },
-                    speed_target: crate::types::actions::movement::SpeedTarget {
-                        relative_speed_to_master: None,
-                        absolute_speed: Some(AbsoluteSpeedAction {
-                            value: crate::types::basic::Value::literal(target),
+                    speed_action_target: crate::types::actions::movement::SpeedActionTarget {
+                        absolute: Some(AbsoluteTargetSpeed {
+                            value: crate::types::basic::Double::literal(target),
                         }),
+                        relative: None,
                     },
                 };
                 LongitudinalAction {

@@ -138,7 +138,7 @@ pub use parameter_variation::{
 
 // Re-export action builders
 pub use actions::{
-    TeleportActionBuilder, LongitudinalActionBuilder, LateralActionBuilder,
+    TeleportActionBuilder,
     SynchronizeActionBuilder, FollowTrajectoryActionBuilder, SpeedActionBuilder,
     LaneChangeActionBuilder, LaneOffsetActionBuilder, ActivateControllerActionBuilder,
     ControllerActionBuilder, OverrideControllerActionBuilder, AppearanceActionBuilder,

@@ -249,13 +249,7 @@ impl ManeuverTeleportActionBuilder {
     }
 }
 
-// Implement PositionTarget for ManeuverTeleportActionBuilder
-impl crate::builder::positions::PositionTarget for ManeuverTeleportActionBuilder {
-    fn set_position(mut self, position: crate::types::positions::Position) -> Self {
-        self.position = Some(position);
-        self
-    }
-}
+// PositionTarget trait implementation removed - trait doesn't exist
 
 /// Builder for longitudinal actions within maneuver events
 pub struct ManeuverLongitudinalActionBuilder {
@@ -300,21 +294,21 @@ impl ManeuverLongitudinalActionBuilder {
 
         use crate::types::scenario::story::{StoryAction, StoryPrivateAction};
         use crate::types::scenario::init::LongitudinalAction;
-        use crate::types::actions::movement::{SpeedAction, LongitudinalDistanceAction, SpeedActionDynamics, SpeedTarget, AbsoluteSpeedAction};
+        use crate::types::actions::movement::{SpeedAction, LongitudinalDistanceAction, TransitionDynamics, SpeedActionTarget, AbsoluteTargetSpeed};
 
         let longitudinal_action = match action_type {
             ManeuverLongitudinalActionType::Speed { target, dynamics } => {
                 let speed_action = SpeedAction {
-                    speed_action_dynamics: SpeedActionDynamics {
+                    speed_action_dynamics: TransitionDynamics {
+                        dynamics_dimension: crate::types::enums::DynamicsDimension::Time,
                         dynamics_shape: crate::types::enums::DynamicsShape::Linear,
-                        value: crate::types::basic::Value::literal(1.0), // Default rate
-                        following_mode: None,
+                        value: crate::types::basic::Double::literal(1.0), // Default rate
                     },
-                    speed_target: SpeedTarget {
-                        relative_speed_to_master: None,
-                        absolute_speed: Some(AbsoluteSpeedAction {
-                            value: crate::types::basic::Value::literal(target),
+                    speed_action_target: SpeedActionTarget {
+                        absolute: Some(AbsoluteTargetSpeed {
+                            value: crate::types::basic::Double::literal(target),
                         }),
+                        relative: None,
                     },
                 };
                 LongitudinalAction {

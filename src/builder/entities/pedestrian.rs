@@ -60,7 +60,7 @@ impl PedestrianBuilder {
     
     /// Set pedestrian dimensions (length, width, height)
     pub fn with_dimensions(mut self, length: f64, width: f64, height: f64) -> Self {
-        let bounding_box = crate::types::entities::vehicle::BoundingBox {
+        let bounding_box = crate::types::geometry::BoundingBox {
             center: crate::types::geometry::shapes::Center {
                 x: Value::literal(0.0),
                 y: Value::literal(0.0),
