@@ -8,6 +8,7 @@ use crate::types::basic::{OSString, ParameterDeclarations};
 use crate::builder::{BuilderError, BuilderResult};
 use crate::builder::events::EventBuilder;
 use super::act::ManeuverGroupBuilder;
+use crate::types::conditions::entity::{ByEntityCondition, ByEntityConditionSchema, EntityCondition};
 
 /// Builder for creating maneuvers within maneuver groups
 pub struct ManeuverBuilder {
@@ -786,35 +787,7 @@ impl ManeuverSpeedConditionBuilder {
             )),
         };
 
-        let speed_condition = SpeedCondition {
-            value: crate::types::basic::Value::literal(*value),
-            rule: rule_enum,
-        };
-
-        let triggering_entities = TriggeringEntities {
-            triggering_entities_rule: crate::types::enums::TriggeringEntitiesRule::Any,
-            entity_refs: vec![EntityRef {
-                entity_ref: OSString::literal(entity_ref.clone()),
-            }],
-        };
-
-        let by_entity_condition = ByEntityCondition {
-            triggering_entities,
-            time_headway_condition: None,
-            time_to_collision_condition: None,
-            acceleration_condition: None,
-            stand_still_condition: None,
-            speed_condition: Some(speed_condition),
-            relative_speed_condition: None,
-            traveled_distance_condition: None,
-            reach_position_condition: None,
-            distance_condition: None,
-            relative_distance_condition: None,
-            end_of_road_condition: None,
-            collision_condition: None,
-            offroad_condition: None,
-            user_defined_value_condition: None,
-        };
+        let by_entity_condition = ByEntityCondition::speed(*value, rule_enum, entity_ref.clone());
 
         Ok(crate::types::scenario::triggers::Condition {
             name: OSString::literal(self.name.clone().unwrap_or_else(|| "SpeedCondition".to_string())),
@@ -961,37 +934,7 @@ impl ManeuverDistanceConditionBuilder {
             )),
         };
 
-        let distance_condition = DistanceCondition {
-            value: crate::types::basic::Value::literal(value),
-            freespace: crate::types::basic::Value::literal(self.freespace),
-            rule: rule_enum,
-            position: position.clone(),
-        };
-
-        let triggering_entities = TriggeringEntities {
-            triggering_entities_rule: crate::types::enums::TriggeringEntitiesRule::Any,
-            entity_refs: vec![EntityRef {
-                entity_ref: OSString::literal(entity_ref.clone()),
-            }],
-        };
-
-        let by_entity_condition = ByEntityCondition {
-            triggering_entities,
-            time_headway_condition: None,
-            time_to_collision_condition: None,
-            acceleration_condition: None,
-            stand_still_condition: None,
-            speed_condition: None,
-            relative_speed_condition: None,
-            traveled_distance_condition: None,
-            reach_position_condition: None,
-            distance_condition: Some(distance_condition),
-            relative_distance_condition: None,
-            end_of_road_condition: None,
-            collision_condition: None,
-            offroad_condition: None,
-            user_defined_value_condition: None,
-        };
+        let by_entity_condition = ByEntityCondition::distance(position.clone(), value, self.freespace, rule_enum);
 
         Ok(crate::types::scenario::triggers::Condition {
             name: OSString::literal(self.name.clone().unwrap_or_else(|| "DistanceCondition".to_string())),
