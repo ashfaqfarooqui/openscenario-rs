@@ -12,7 +12,7 @@ pub use act::ActBuilder;
 pub use maneuver::ManeuverBuilder;
 
 use crate::types::scenario::storyboard::Storyboard;
-use crate::types::scenario::init::Init;
+use crate::types::scenario::init::{Init, Private, PrivateActionWrapper, Actions, LongitudinalAction};
 use crate::types::scenario::story::ScenarioStory;
 use crate::types::scenario::triggers::Trigger;
 use crate::builder::{BuilderError, BuilderResult};
@@ -123,7 +123,7 @@ impl Default for StoryboardBuilder {
 /// Builder for creating init actions
 pub struct InitActionBuilder {
     parent: StoryboardBuilder,
-    actions: Vec<crate::types::scenario::init::InitAction>,
+    actions: Vec<Private>,
 }
 
 impl InitActionBuilder {
@@ -153,13 +153,16 @@ impl InitActionBuilder {
     /// Finish building the init actions
     pub fn finish_init(self) -> StoryboardBuilder {
         let init = Init {
-            actions: self.actions,
+            actions: Actions {
+                global_actions: Vec::new(),
+                private_actions: self.actions,
+            },
         };
         self.parent.set_init(init)
     }
 
     /// Internal method to add a completed action
-    fn add_completed_action(mut self, action: crate::types::scenario::init::InitAction) -> Self {
+    fn add_completed_action(mut self, action: Private) -> Self {
         self.actions.push(action);
         self
     }
@@ -201,7 +204,7 @@ impl InitTeleportActionBuilder {
             )
         })?;
 
-        use crate::types::scenario::init::{InitAction, PrivateAction};
+
         use crate::types::actions::movement::TeleportAction;
         use crate::types::basic::OSString;
 
@@ -209,8 +212,7 @@ impl InitTeleportActionBuilder {
             position,
         };
 
-        let private_action = PrivateAction {
-            entity_ref: OSString::literal(self.entity_ref),
+        let private_action_wrapper = PrivateActionWrapper {
             longitudinal_action: None,
             lateral_action: None,
             visibility_action: None,
@@ -222,23 +224,16 @@ impl InitTeleportActionBuilder {
             trailer_action: None,
         };
 
-        let init_action = InitAction {
-            private_action: Some(private_action),
-            global_action: None,
-            user_defined_action: None,
+        let private = Private {
+            entity_ref: OSString::literal(self.entity_ref),
+            private_actions: vec![private_action_wrapper],
         };
 
-        Ok(self.parent.add_completed_action(init_action))
+        Ok(self.parent.add_completed_action(private))
     }
 }
 
-// Implement PositionTarget for InitTeleportActionBuilder
-impl crate::builder::positions::PositionTarget for InitTeleportActionBuilder {
-    fn set_position(mut self, position: crate::types::positions::Position) -> Self {
-        self.position = Some(position);
-        self
-    }
-}
+// PositionTarget trait implementation removed - trait doesn't exist
 
 /// Builder for speed actions in init
 pub struct InitSpeedActionBuilder {
@@ -271,32 +266,29 @@ impl InitSpeedActionBuilder {
             )
         })?;
 
-        use crate::types::scenario::init::{InitAction, PrivateAction, LongitudinalAction};
-        use crate::types::actions::movement::{SpeedAction, SpeedActionDynamics, SpeedTarget, AbsoluteSpeedAction};
+        use crate::types::actions::movement::{SpeedAction, TransitionDynamics, SpeedActionTarget, AbsoluteTargetSpeed};
         use crate::types::basic::OSString;
         use crate::types::enums::DynamicsShape;
 
         let speed_action = SpeedAction {
-            speed_action_dynamics: SpeedActionDynamics {
+            speed_action_dynamics: TransitionDynamics {
+                dynamics_dimension: crate::types::enums::DynamicsDimension::Time,
                 dynamics_shape: DynamicsShape::Step,
-                value: crate::types::basic::Value::literal(0.0), // Instant
-                following_mode: None,
+                value: crate::types::basic::Double::literal(0.0), // Instant
             },
-            speed_target: SpeedTarget {
-                relative_speed_to_master: None,
-                absolute_speed: Some(AbsoluteSpeedAction {
-                    value: crate::types::basic::Value::literal(speed),
+            speed_action_target: SpeedActionTarget {
+                absolute: Some(AbsoluteTargetSpeed {
+                    value: crate::types::basic::Double::literal(speed),
                 }),
+                relative: None,
             },
         };
 
         let longitudinal_action = LongitudinalAction {
             speed_action: Some(speed_action),
-            longitudinal_distance_action: None,
         };
 
-        let private_action = PrivateAction {
-            entity_ref: OSString::literal(self.entity_ref),
+        let private_action_wrapper = PrivateActionWrapper {
             longitudinal_action: Some(longitudinal_action),
             lateral_action: None,
             visibility_action: None,
@@ -308,13 +300,12 @@ impl InitSpeedActionBuilder {
             trailer_action: None,
         };
 
-        let init_action = InitAction {
-            private_action: Some(private_action),
-            global_action: None,
-            user_defined_action: None,
+        let private = Private {
+            entity_ref: OSString::literal(self.entity_ref),
+            private_actions: vec![private_action_wrapper],
         };
 
-        Ok(self.parent.add_completed_action(init_action))
+        Ok(self.parent.add_completed_action(private))
     }
 }
 
@@ -354,7 +345,7 @@ impl InitPositionActionBuilder {
             )
         })?;
 
-        use crate::types::scenario::init::{InitAction, PrivateAction};
+
         use crate::types::actions::movement::TeleportAction;
         use crate::types::basic::OSString;
 
@@ -362,8 +353,7 @@ impl InitPositionActionBuilder {
             position,
         };
 
-        let private_action = PrivateAction {
-            entity_ref: OSString::literal(self.entity_ref),
+        let private_action_wrapper = PrivateActionWrapper {
             longitudinal_action: None,
             lateral_action: None,
             visibility_action: None,
@@ -375,23 +365,16 @@ impl InitPositionActionBuilder {
             trailer_action: None,
         };
 
-        let init_action = InitAction {
-            private_action: Some(private_action),
-            global_action: None,
-            user_defined_action: None,
+        let private = Private {
+            entity_ref: OSString::literal(self.entity_ref),
+            private_actions: vec![private_action_wrapper],
         };
 
-        Ok(self.parent.add_completed_action(init_action))
+        Ok(self.parent.add_completed_action(private))
     }
 }
 
-// Implement PositionTarget for InitPositionActionBuilder
-impl crate::builder::positions::PositionTarget for InitPositionActionBuilder {
-    fn set_position(mut self, position: crate::types::positions::Position) -> Self {
-        self.position = Some(position);
-        self
-    }
-}
+// PositionTarget trait implementation removed - trait doesn't exist
 
 /// Builder for creating triggers within storyboards
 pub struct StoryboardTriggerBuilder {
@@ -539,13 +522,7 @@ impl StoryboardSimulationTimeConditionBuilder {
         };
 
         let by_value_condition = ByValueCondition {
-            simulation_time_condition: Some(sim_time_condition),
-            parameter_condition: None,
-            variable_condition: None,
-            storyboard_element_state_condition: None,
-            user_defined_value_condition: None,
-            traffic_signal_condition: None,
-            traffic_signal_controller_condition: None,
+            simulation_time: Some(sim_time_condition),
         };
 
         Ok(crate::types::scenario::triggers::Condition {
@@ -674,6 +651,7 @@ impl StoryboardSpeedConditionBuilder {
         let speed_condition = SpeedCondition {
             value: crate::types::basic::Value::literal(*value),
             rule: rule_enum,
+            entity_ref: entity_ref.clone(),
         };
 
         let triggering_entities = TriggeringEntities {
@@ -683,23 +661,7 @@ impl StoryboardSpeedConditionBuilder {
             }],
         };
 
-        let by_entity_condition = ByEntityCondition {
-            triggering_entities,
-            time_headway_condition: None,
-            time_to_collision_condition: None,
-            acceleration_condition: None,
-            stand_still_condition: None,
-            speed_condition: Some(speed_condition),
-            relative_speed_condition: None,
-            traveled_distance_condition: None,
-            reach_position_condition: None,
-            distance_condition: None,
-            relative_distance_condition: None,
-            end_of_road_condition: None,
-            collision_condition: None,
-            offroad_condition: None,
-            user_defined_value_condition: None,
-        };
+        let by_entity_condition = ByEntityCondition::Speed(speed_condition);
 
         Ok(crate::types::scenario::triggers::Condition {
             name: OSString::literal(self.name.clone().unwrap_or_else(|| "SpeedCondition".to_string())),
@@ -848,10 +810,14 @@ impl StoryboardDistanceConditionBuilder {
         };
 
         let distance_condition = DistanceCondition {
+            position: position.clone(),
             value: crate::types::basic::Value::literal(value),
             freespace: crate::types::basic::Value::literal(self.freespace),
             rule: rule_enum,
-            position: position.clone(),
+            along_route: None,
+            coordinate_system: None,
+            relative_distance_type: None,
+            routing_algorithm: None,
         };
 
         let triggering_entities = TriggeringEntities {

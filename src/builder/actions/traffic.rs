@@ -8,8 +8,9 @@ use crate::types::{
         TrafficSignalStateAction, TrafficSignalControllerAction,
         VehicleCategory, VehicleCategoryDistribution, CentralSwarmObject,
         TrafficDefinition, TrafficArea, TrafficAreaVertex,
+        TrafficSignalState, TrafficSignalGroupState,
     },
-    enums::{TrafficSignalState, TrafficSignalGroupState},
+
     positions::Position,
 };
 use crate::builder::{BuilderError, BuilderResult};

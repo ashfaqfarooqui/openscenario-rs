@@ -5,7 +5,7 @@ use crate::types::{
     actions::{
         AppearanceAction, LightStateAction, AnimationAction, VisibilityAction,
     },
-    enums::LightType,
+    enums::VehicleLightType,
 };
 use crate::builder::{BuilderError, BuilderResult};
 use super::{ActionBuilder, validate_entity_ref};
@@ -101,7 +101,7 @@ impl ActionBuilder for AppearanceActionBuilder {
 #[derive(Debug, Clone)]
 pub struct LightActionBuilder {
     entity_ref: Option<String>,
-    light_type: Option<LightType>,
+    light_type: Option<VehicleLightType>,
     state: Option<bool>,
     flashing_on_duration: Option<f64>,
     flashing_off_duration: Option<f64>,
@@ -128,7 +128,7 @@ impl LightActionBuilder {
     }
     
     /// Set the light type
-    pub fn light_type(mut self, light_type: LightType) -> Self {
+    pub fn light_type(mut self, light_type: VehicleLightType) -> Self {
         self.light_type = Some(light_type);
         self
     }
@@ -353,13 +353,13 @@ mod tests {
     fn test_light_action_builder() {
         let action = LightActionBuilder::new()
             .entity("test_vehicle")
-            .light_type(LightType::Headlight)
+            .light_type(VehicleLightType::Headlight)
             .on()
             .luminous_intensity(1000.0)
             .finish()
             .unwrap();
         
-        assert_eq!(action.light_type, LightType::Headlight);
+        assert_eq!(action.light_type, VehicleLightType::Headlight);
         assert_eq!(action.state.as_literal().unwrap(), &true);
         assert_eq!(action.luminous_intensity.unwrap().as_literal().unwrap(), &1000.0);
     }
@@ -368,7 +368,7 @@ mod tests {
     fn test_light_action_builder_validation() {
         let result = LightActionBuilder::new()
             .entity("test_vehicle")
-            .light_type(LightType::Headlight)
+            .light_type(VehicleLightType::Headlight)
             // Missing state
             .finish();
         

@@ -16,7 +16,8 @@
 //! - Facilitating visual simulation output and rendering integration
 //! - Controlling entity visibility for graphics, sensors, and traffic
 
-use crate::types::basic::{Boolean, OSString};
+use crate::types::basic::{Boolean, Double, Int, OSString};
+use crate::types::enums::VehicleLightType;
 use serde::{Deserialize, Serialize};
 
 /// Controls entity visibility in different simulation contexts
@@ -67,16 +68,44 @@ pub struct AppearanceAction {
     pub animation_action: Option<AnimationAction>,
 }
 
-/// Light state control action (placeholder for future implementation)
+/// Light state control action
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct LightStateAction {
-    // TODO: Implement based on schema definition
+    /// Type of light to control
+    #[serde(rename = "@lightType")]
+    pub light_type: VehicleLightType,
+    
+    /// Light state (on/off)
+    #[serde(rename = "@state")]
+    pub state: Boolean,
+    
+    /// Flashing on duration in seconds
+    #[serde(rename = "@flashingOnDuration", skip_serializing_if = "Option::is_none")]
+    pub flashing_on_duration: Option<Double>,
+    
+    /// Flashing off duration in seconds
+    #[serde(rename = "@flashingOffDuration", skip_serializing_if = "Option::is_none")]
+    pub flashing_off_duration: Option<Double>,
+    
+    /// Luminous intensity
+    #[serde(rename = "@luminousIntensity", skip_serializing_if = "Option::is_none")]
+    pub luminous_intensity: Option<Double>,
 }
 
-/// Animation action (placeholder for future implementation)
+/// Animation action for entity animations
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AnimationAction {
-    // TODO: Implement based on schema definition
+    /// Type of animation
+    #[serde(rename = "@animationType")]
+    pub animation_type: OSString,
+    
+    /// Animation state
+    #[serde(rename = "@state", skip_serializing_if = "Option::is_none")]
+    pub state: Option<OSString>,
+    
+    /// Number of animation loops
+    #[serde(rename = "@loopCount", skip_serializing_if = "Option::is_none")]
+    pub loop_count: Option<Int>,
 }
 
 impl Default for VisibilityAction {
@@ -117,12 +146,22 @@ impl Default for AppearanceAction {
 
 impl Default for LightStateAction {
     fn default() -> Self {
-        Self {}
+        Self {
+            light_type: VehicleLightType::Headlight,
+            state: Boolean::literal(false),
+            flashing_on_duration: None,
+            flashing_off_duration: None,
+            luminous_intensity: None,
+        }
     }
 }
 
 impl Default for AnimationAction {
     fn default() -> Self {
-        Self {}
+        Self {
+            animation_type: OSString::literal("default".to_string()),
+            state: None,
+            loop_count: None,
+        }
     }
 }

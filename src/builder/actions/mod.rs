@@ -9,9 +9,8 @@ pub mod appearance;
 pub mod traffic;
 
 pub use movement::{
-    TeleportActionBuilder, LongitudinalActionBuilder, LateralActionBuilder,
-    SynchronizeActionBuilder, FollowTrajectoryActionBuilder, SpeedActionBuilder,
-    LaneChangeActionBuilder, LaneOffsetActionBuilder,
+    TeleportActionBuilder, SynchronizeActionBuilder, FollowTrajectoryActionBuilder, 
+    SpeedActionBuilder, LaneChangeActionBuilder, LaneOffsetActionBuilder,
 };
 pub use control::{
     ActivateControllerActionBuilder, ControllerActionBuilder, OverrideControllerActionBuilder,
@@ -57,8 +56,6 @@ pub enum ActionType {
 /// Movement action subtypes
 pub enum MovementActionType {
     Teleport(TeleportActionBuilder),
-    Longitudinal(LongitudinalActionBuilder),
-    Lateral(LateralActionBuilder),
     Synchronize(SynchronizeActionBuilder),
     FollowTrajectory(FollowTrajectoryActionBuilder),
     Speed(SpeedActionBuilder),
@@ -93,15 +90,7 @@ impl UnifiedActionBuilder {
         TeleportActionBuilder::new()
     }
     
-    /// Create a new longitudinal action builder
-    pub fn longitudinal() -> LongitudinalActionBuilder {
-        LongitudinalActionBuilder::new()
-    }
-    
-    /// Create a new lateral action builder
-    pub fn lateral() -> LateralActionBuilder {
-        LateralActionBuilder::new()
-    }
+
     
     /// Create a new speed action builder
     pub fn speed() -> SpeedActionBuilder {
