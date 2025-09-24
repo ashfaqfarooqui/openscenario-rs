@@ -10,22 +10,22 @@
 //! - Comprehensive validation with registry tracking
 //! - Integration with existing OpenSCENARIO type system
 
+use super::{
+    error::{BuilderError, BuilderResult},
+    registry::{CatalogRegistry, EntityRegistry, ParameterRegistry},
+    states::*,
+};
 use crate::types::{
     basic::{ParameterDeclarations, Value},
     catalogs::locations::CatalogLocations,
     entities::Entities,
-    road::{RoadNetwork, LogicFile, SceneGraphFile},
+    road::{LogicFile, RoadNetwork, SceneGraphFile},
     scenario::{
-        storyboard::{FileHeader, OpenScenario, Storyboard},
         init::Init,
-        variables::VariableDeclarations,
         monitors::MonitorDeclarations,
+        storyboard::{FileHeader, OpenScenario, Storyboard},
+        variables::VariableDeclarations,
     },
-};
-use super::{
-    error::{BuilderError, BuilderResult},
-    registry::{EntityRegistry, ParameterRegistry, CatalogRegistry},
-    states::*,
 };
 use std::marker::PhantomData;
 
@@ -39,7 +39,7 @@ pub struct ScenarioBuilder<S: BuilderState> {
 }
 
 /// Internal data structure for building scenarios
-/// 
+///
 /// Optimized for cache efficiency with frequently accessed fields first
 #[derive(Debug, Default)]
 struct PartialScenarioData {
@@ -48,7 +48,7 @@ struct PartialScenarioData {
     entities: Option<Entities>,
     storyboard: Option<Storyboard>,
     road_network: Option<RoadNetwork>,
-    
+
     // Less frequently accessed fields
     catalog_locations: Option<CatalogLocations>,
     parameter_declarations: Option<ParameterDeclarations>,
@@ -125,7 +125,8 @@ impl<S: AfterHeader> ScenarioBuilder<S> {
     /// Add parameter declarations
     pub fn with_parameters(mut self, parameters: ParameterDeclarations) -> BuilderResult<Self> {
         // Register parameters for validation
-        self.parameter_registry.add_parameter_declarations(&parameters)?;
+        self.parameter_registry
+            .add_parameter_declarations(&parameters)?;
         self.scenario_data.parameter_declarations = Some(parameters);
         Ok(self)
     }
@@ -150,7 +151,8 @@ impl ScenarioBuilder<HasHeader> {
         locations: CatalogLocations,
     ) -> BuilderResult<ScenarioBuilder<HasCatalogLocations>> {
         // Register catalog locations for validation
-        self.catalog_registry.set_catalog_locations(locations.clone())?;
+        self.catalog_registry
+            .set_catalog_locations(locations.clone())?;
         self.scenario_data.catalog_locations = Some(locations);
 
         Ok(ScenarioBuilder {
@@ -193,7 +195,7 @@ impl ScenarioBuilder<HasCatalogLocations> {
         scene_graph_path: Option<String>,
     ) -> ScenarioBuilder<HasRoadNetwork> {
         let mut road_network = RoadNetwork::new(LogicFile::new(logic_file_path));
-        
+
         if let Some(scene_path) = scene_graph_path {
             road_network.scene_graph_file = Some(SceneGraphFile::new(scene_path));
         }
@@ -236,7 +238,7 @@ impl<S: CanAddEntities> ScenarioBuilder<S> {
         // 1. Create a VehicleBuilder
         // 2. Allow configuration of the vehicle
         // 3. Add the vehicle to the entity registry when complete
-        
+
         VehicleBuilder {
             _placeholder: PhantomData,
         }
@@ -248,7 +250,7 @@ impl<S: CanAddEntities> ScenarioBuilder<S> {
         // 1. Create a PedestrianBuilder
         // 2. Allow configuration of the pedestrian
         // 3. Add the pedestrian to the entity registry when complete
-        
+
         PedestrianBuilder {
             _placeholder: PhantomData,
         }
@@ -274,23 +276,28 @@ impl<S: CanBuild> ScenarioBuilder<S> {
     /// Internal build method with validation control
     fn build_internal(self, strict_validation: bool) -> BuilderResult<OpenScenario> {
         // Validate required fields
-        let file_header = self.scenario_data.file_header
-            .ok_or_else(|| BuilderError::missing_field("file_header", "Call with_header() first"))?;
+        let file_header = self.scenario_data.file_header.ok_or_else(|| {
+            BuilderError::missing_field("file_header", "Call with_header() first")
+        })?;
 
-        let catalog_locations = self.scenario_data.catalog_locations
-            .ok_or_else(|| BuilderError::missing_field("catalog_locations", "Call with_catalog_locations() first"))?;
+        let catalog_locations = self.scenario_data.catalog_locations.ok_or_else(|| {
+            BuilderError::missing_field("catalog_locations", "Call with_catalog_locations() first")
+        })?;
 
-        let road_network = self.scenario_data.road_network
-            .ok_or_else(|| BuilderError::missing_field("road_network", "Call with_road_network() first"))?;
+        let road_network = self.scenario_data.road_network.ok_or_else(|| {
+            BuilderError::missing_field("road_network", "Call with_road_network() first")
+        })?;
 
-        let entities = self.scenario_data.entities
+        let entities = self
+            .scenario_data
+            .entities
             .ok_or_else(|| BuilderError::missing_field("entities", "Call with_entities() first"))?;
 
         // In strict mode, validate entity count
         if strict_validation && entities.scenario_objects.is_empty() {
             return Err(BuilderError::validation_error(
                 "No entities defined in scenario",
-                "Add at least one entity using add_vehicle() or add_pedestrian()"
+                "Add at least one entity using add_vehicle() or add_pedestrian()",
             ));
         }
 
@@ -394,7 +401,10 @@ impl<S: CanAddEntities> ScenarioStoryboardBuilder<S> {
     }
 
     /// Internal method to update the storyboard builder
-    fn set_storyboard_builder(mut self, storyboard_builder: crate::builder::storyboard::StoryboardBuilder) -> Self {
+    fn set_storyboard_builder(
+        mut self,
+        storyboard_builder: crate::builder::storyboard::StoryboardBuilder,
+    ) -> Self {
         self.storyboard_builder = storyboard_builder;
         self
     }
@@ -411,7 +421,10 @@ impl<S: CanAddEntities> ScenarioInitActionBuilder<S> {
     }
 
     /// Add a teleport action
-    pub fn teleport(mut self, entity_ref: impl Into<String>) -> ScenarioInitTeleportActionBuilder<S> {
+    pub fn teleport(
+        mut self,
+        entity_ref: impl Into<String>,
+    ) -> ScenarioInitTeleportActionBuilder<S> {
         ScenarioInitTeleportActionBuilder::new(self, entity_ref.into())
     }
 
@@ -446,19 +459,29 @@ impl<S: CanAddEntities> ScenarioInitTeleportActionBuilder<S> {
 
     /// Set the target position using world coordinates
     pub fn to_world_position(mut self, x: f64, y: f64, z: f64) -> Self {
-        use crate::types::positions::{Position, WorldPosition};
         use crate::types::basic::Value;
-        
+        use crate::types::positions::{Position, WorldPosition};
+
         let world_pos = WorldPosition {
             x: Value::literal(x),
             y: Value::literal(y),
-            z: Value::literal(z),
-            h: Value::literal(0.0),
-            p: Value::literal(0.0),
-            r: Value::literal(0.0),
+            z: Some(Value::literal(z)),
+            h: Some(Value::literal(0.0)),
+            p: Some(Value::literal(0.0)),
+            r: Some(Value::literal(0.0)),
         };
-        
-        self.position = Some(Position::WorldPosition(world_pos));
+
+        self.position = Some(Position {
+            world_position: Some(world_pos),
+            relative_world_position: None,
+            road_position: None,
+            relative_road_position: None,
+            lane_position: None,
+            relative_lane_position: None,
+            trajectory_position: None,
+            geographic_position: None,
+            relative_object_position: None,
+        });
         self
     }
 
@@ -545,7 +568,10 @@ impl<S: CanAddEntities> ScenarioActBuilder<S> {
     }
 
     /// Add a maneuver group to this act
-    pub fn add_maneuver_group(mut self, name: impl Into<String>) -> ScenarioManeuverGroupBuilder<S> {
+    pub fn add_maneuver_group(
+        mut self,
+        name: impl Into<String>,
+    ) -> ScenarioManeuverGroupBuilder<S> {
         ScenarioManeuverGroupBuilder::new(self, name.into())
     }
 
@@ -645,7 +671,10 @@ impl<S: CanAddEntities> ScenarioEventActionBuilder<S> {
     }
 
     /// Add a longitudinal action
-    pub fn longitudinal(mut self, entity_ref: impl Into<String>) -> ScenarioLongitudinalActionBuilder<S> {
+    pub fn longitudinal(
+        mut self,
+        entity_ref: impl Into<String>,
+    ) -> ScenarioLongitudinalActionBuilder<S> {
         ScenarioLongitudinalActionBuilder::new(self, entity_ref.into())
     }
 
@@ -694,7 +723,10 @@ pub struct ScenarioSpeedActionBuilder<S: BuilderState> {
 
 impl<S: CanAddEntities> ScenarioSpeedActionBuilder<S> {
     fn new(parent: ScenarioLongitudinalActionBuilder<S>) -> Self {
-        Self { parent, target: None }
+        Self {
+            parent,
+            target: None,
+        }
     }
 
     /// Set absolute target speed
@@ -729,19 +761,29 @@ impl<S: CanAddEntities> ScenarioTeleportActionBuilder<S> {
 
     /// Set the target position using world coordinates
     pub fn to_world_position(mut self, x: f64, y: f64, z: f64) -> Self {
-        use crate::types::positions::{Position, WorldPosition};
         use crate::types::basic::Value;
-        
+        use crate::types::positions::{Position, WorldPosition};
+
         let world_pos = WorldPosition {
             x: Value::literal(x),
             y: Value::literal(y),
-            z: Value::literal(z),
-            h: Value::literal(0.0),
-            p: Value::literal(0.0),
-            r: Value::literal(0.0),
+            z: Some(Value::literal(z)),
+            h: Some(Value::literal(0.0)),
+            p: Some(Value::literal(0.0)),
+            r: Some(Value::literal(0.0)),
         };
-        
-        self.position = Some(Position::WorldPosition(world_pos));
+
+        self.position = Some(Position {
+            world_position: Some(world_pos),
+            relative_world_position: None,
+            road_position: None,
+            relative_road_position: None,
+            lane_position: None,
+            relative_lane_position: None,
+            trajectory_position: None,
+            geographic_position: None,
+            relative_object_position: None,
+        });
         self
     }
 
@@ -793,7 +835,10 @@ pub struct ScenarioSimulationTimeConditionBuilder<S: BuilderState> {
 
 impl<S: CanAddEntities> ScenarioSimulationTimeConditionBuilder<S> {
     fn new(parent: ScenarioEventTriggerBuilder<S>) -> Self {
-        Self { parent, value: None }
+        Self {
+            parent,
+            value: None,
+        }
     }
 
     /// Set greater than rule
@@ -841,7 +886,10 @@ pub struct ScenarioStoryboardSimulationTimeConditionBuilder<S: BuilderState> {
 
 impl<S: CanAddEntities> ScenarioStoryboardSimulationTimeConditionBuilder<S> {
     fn new(parent: ScenarioStoryboardTriggerBuilder<S>) -> Self {
-        Self { parent, value: None }
+        Self {
+            parent,
+            value: None,
+        }
     }
 
     /// Set greater than rule
@@ -881,7 +929,12 @@ mod tests {
         let scenario = builder.build().unwrap();
 
         // Verify the built scenario has the expected structure
-        assert!(scenario.file_header.description.as_literal().unwrap().contains("Test"));
+        assert!(scenario
+            .file_header
+            .description
+            .as_literal()
+            .unwrap()
+            .contains("Test"));
         assert!(scenario.catalog_locations.is_some());
         assert!(scenario.road_network.is_some());
         assert!(scenario.entities.is_some());
@@ -891,7 +944,8 @@ mod tests {
     fn test_scenario_builder_with_parameters() {
         let builder = ScenarioBuilder::new()
             .with_simple_header("Test", "Author")
-            .with_default_catalogs().unwrap()
+            .with_default_catalogs()
+            .unwrap()
             .with_road_network("test.xodr")
             .with_entities();
 
@@ -906,14 +960,14 @@ mod tests {
         // Can't call build() on Empty state - this is prevented at compile time
 
         // Test building without catalog locations
-        let builder = ScenarioBuilder::new()
-            .with_simple_header("Test", "Author");
+        let builder = ScenarioBuilder::new().with_simple_header("Test", "Author");
         // Can't call build() on HasHeader state - this is prevented at compile time
 
         // Test building without road network
         let builder = ScenarioBuilder::new()
             .with_simple_header("Test", "Author")
-            .with_default_catalogs().unwrap();
+            .with_default_catalogs()
+            .unwrap();
         // Can't call build() on HasCatalogLocations state - this is prevented at compile time
     }
 
@@ -921,7 +975,8 @@ mod tests {
     fn test_scenario_builder_strict_validation() {
         let builder = ScenarioBuilder::new()
             .with_simple_header("Test", "Author")
-            .with_default_catalogs().unwrap()
+            .with_default_catalogs()
+            .unwrap()
             .with_road_network("test.xodr")
             .with_entities();
 
@@ -931,36 +986,61 @@ mod tests {
         // Strict validation should fail with no entities
         let result = builder.build_validated();
         assert!(result.is_err());
-        assert!(matches!(result.unwrap_err(), BuilderError::ValidationError { .. }));
+        assert!(matches!(
+            result.unwrap_err(),
+            BuilderError::ValidationError { .. }
+        ));
     }
 
     #[test]
     fn test_scenario_builder_road_network_variants() {
         let builder = ScenarioBuilder::new()
             .with_simple_header("Test", "Author")
-            .with_default_catalogs().unwrap();
+            .with_default_catalogs()
+            .unwrap();
 
         // Test with logic file only
-        let builder1 = builder.clone().with_road_network_from_logic_file("test.xodr".to_string());
+        let builder1 = builder
+            .clone()
+            .with_road_network_from_logic_file("test.xodr".to_string());
         let scenario1 = builder1.with_entities().build().unwrap();
-        assert!(scenario1.road_network.as_ref().unwrap().logic_file.is_some());
-        assert!(scenario1.road_network.as_ref().unwrap().scene_graph_file.is_none());
+        assert!(scenario1
+            .road_network
+            .as_ref()
+            .unwrap()
+            .logic_file
+            .is_some());
+        assert!(scenario1
+            .road_network
+            .as_ref()
+            .unwrap()
+            .scene_graph_file
+            .is_none());
 
         // Test with both logic file and scene graph
-        let builder2 = builder.with_road_network_full(
-            "test.xodr".to_string(),
-            Some("test.osgb".to_string())
-        );
+        let builder2 =
+            builder.with_road_network_full("test.xodr".to_string(), Some("test.osgb".to_string()));
         let scenario2 = builder2.with_entities().build().unwrap();
-        assert!(scenario2.road_network.as_ref().unwrap().logic_file.is_some());
-        assert!(scenario2.road_network.as_ref().unwrap().scene_graph_file.is_some());
+        assert!(scenario2
+            .road_network
+            .as_ref()
+            .unwrap()
+            .logic_file
+            .is_some());
+        assert!(scenario2
+            .road_network
+            .as_ref()
+            .unwrap()
+            .scene_graph_file
+            .is_some());
     }
 
     #[test]
     fn test_scenario_builder_registry_access() {
         let builder = ScenarioBuilder::new()
             .with_simple_header("Test", "Author")
-            .with_default_catalogs().unwrap()
+            .with_default_catalogs()
+            .unwrap()
             .with_road_network("test.xodr")
             .with_entities();
 
@@ -974,7 +1054,8 @@ mod tests {
     fn test_entity_builder_placeholders() {
         let mut builder = ScenarioBuilder::new()
             .with_simple_header("Test", "Author")
-            .with_default_catalogs().unwrap()
+            .with_default_catalogs()
+            .unwrap()
             .with_road_network("test.xodr")
             .with_entities();
 
@@ -989,14 +1070,20 @@ mod tests {
     fn test_scenario_builder_default() {
         let builder = ScenarioBuilder::default();
         let builder = builder.with_simple_header("Default Test", "Default Author");
-        
+
         let scenario = builder
-            .with_default_catalogs().unwrap()
+            .with_default_catalogs()
+            .unwrap()
             .with_road_network("default.xodr")
             .with_entities()
-            .build().unwrap();
+            .build()
+            .unwrap();
 
-        assert!(scenario.file_header.description.as_literal().unwrap().contains("Default Test"));
+        assert!(scenario
+            .file_header
+            .description
+            .as_literal()
+            .unwrap()
+            .contains("Default Test"));
     }
 }
-

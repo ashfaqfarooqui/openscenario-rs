@@ -211,8 +211,8 @@ impl ManeuverTeleportActionBuilder {
     }
 
     /// Set the target position
-    pub fn to_position(mut self) -> crate::builder::positions::UnifiedPositionBuilder<Self> {
-        crate::builder::positions::UnifiedPositionBuilder::new(self)
+    pub fn to_position(mut self) -> crate::builder::positions::WorldPositionBuilder {
+        crate::builder::positions::UnifiedPositionBuilder::world()
     }
 
     /// Set a pre-built position

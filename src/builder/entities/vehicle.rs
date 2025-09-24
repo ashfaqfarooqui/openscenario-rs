@@ -67,7 +67,7 @@ impl VehicleBuilder {
     
     /// Set the vehicle category to trailer
     pub fn trailer(mut self) -> Self {
-        self.vehicle.vehicle_category = VehicleCategory::Trailer;
+        self.vehicle.vehicle_category = VehicleCategory::Semitrailer;
         self
     }
     
@@ -136,7 +136,7 @@ impl VehicleBuilder {
             position_z: Value::literal(position_z),
         };
         
-        self.vehicle.axles.front_axle = front_axle;
+        self.vehicle.axles.front_axle = Some(front_axle);
         self
     }
     
@@ -296,10 +296,10 @@ impl PositionBuilder {
         let world_pos = crate::types::positions::WorldPosition {
             x: Value::literal(x),
             y: Value::literal(y),
-            z: Value::literal(z),
-            h: Value::literal(0.0),
-            p: Value::literal(0.0),
-            r: Value::literal(0.0),
+            z: Some(Value::literal(z)),
+            h: Some(Value::literal(0.0)),
+            p: Some(Value::literal(0.0)),
+            r: Some(Value::literal(0.0)),
         };
         
         let position = Position {

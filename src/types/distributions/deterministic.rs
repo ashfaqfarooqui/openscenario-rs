@@ -1,7 +1,7 @@
 //! Deterministic distribution types for systematic parameter variation
 
 use crate::error::Result;
-use crate::types::basic::{OSString, Value};
+use crate::types::basic::{Double, OSString, Value};
 use crate::types::distributions::{DistributionSampler, ValidateDistribution};
 use serde::{Deserialize, Serialize};
 
@@ -117,7 +117,7 @@ pub struct DistributionSetElement {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DistributionRange {
     #[serde(rename = "@stepWidth")]
-    pub step_width: OSString,
+    pub step_width: Double,
     #[serde(rename = "Range")]
     pub range: crate::types::basic::Range,
 }
